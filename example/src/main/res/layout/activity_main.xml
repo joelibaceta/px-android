@@ -22,7 +22,7 @@
         <com.mercadopago.customviews.MPTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome_title"
+            android:text="NICOOOO"
             android:id="@+id/textView"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
