@@ -3,10 +3,6 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'jacoco-android'
 
-version = "3.6.0"
-group = "com.mercadopago"
-archivesBaseName = "sdk"
-
 task jacocoFullTestReport(type: JacocoReport, dependsOn: ['jacocoTestReport', 'createDevDebugCoverageReport']) {
 
     reports {
@@ -70,6 +66,7 @@ android {
         // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
         preDexLibraries = preDexEnabled && !travisBuild
     }
+
     lintOptions {
         abortOnError false
     }
@@ -86,6 +83,12 @@ android {
             buildConfigField "String", "API_VERSION", "\"v1\""
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 project.gradle.taskGraph.whenReady {
