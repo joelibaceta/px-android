@@ -21,10 +21,7 @@ import com.mercadopago.paymentresult.renderers.PaymentResultBodyRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultFooterRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultHeaderRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultRenderer;
-import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
-import com.mercadopago.providers.PaymentResultProvider;
-import com.mercadopago.providers.PaymentResultProviderImpl;
 import com.mercadopago.util.JsonUtil;
 
 import java.math.BigDecimal;
@@ -44,7 +41,6 @@ public class PaymentResultActivity extends AppCompatActivity {
 
     private String merchantPublicKey;
     private String payerAccessToken;
-    private PaymentResult paymentResult;
     private Integer congratsDisplay;
     private PaymentResultScreenPreference paymentResultScreenPreference;
     private ServicePreference servicePreference;
@@ -60,7 +56,7 @@ public class PaymentResultActivity extends AppCompatActivity {
         presenter = new PaymentResultPresenter();
         getActivityParameters();
 
-        PaymentResultProvider provider = new PaymentResultProviderImpl(this);
+        PaymentResultProvider provider = new PaymentResultProviderImpl(this, merchantPublicKey, payerAccessToken);
         presenter.attachView(mutator);
         presenter.attachResourcesProvider(provider);
 
@@ -73,12 +69,12 @@ public class PaymentResultActivity extends AppCompatActivity {
         RendererFactory.register(PaymentResultFooterComponent.class, PaymentResultFooterRenderer.class);
         RendererFactory.register(IconComponent.class, IconRenderer.class);
 
-        final Component root = new PaymentResultContainer(componentManager);
+        final Component root = new PaymentResultContainer(componentManager, provider);
         componentManager.setActionsListener(presenter);
         componentManager.setComponent(root);
         componentManager.setMutator(mutator);
 
-        presenter.setPaymentResult(paymentResult);
+        presenter.initialize();
     }
 
 
@@ -186,17 +182,20 @@ public class PaymentResultActivity extends AppCompatActivity {
         if (getIntent().getStringExtra("amount") != null) {
             amount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
-        paymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
+        PaymentResult paymentResult = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResult"), PaymentResult.class);
 
         presenter.setDiscountEnabled(discountEnabled);
         presenter.setSite(site);
         presenter.setAmount(amount);
+        presenter.setPaymentResult(paymentResult);
 
         merchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         congratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         paymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
         servicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
+
+        presenter.setPaymentResultScreenPreference(paymentResultScreenPreference);
     }
 
     @Override

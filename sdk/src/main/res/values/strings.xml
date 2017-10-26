@@ -292,5 +292,5 @@
     <string name="mpsdk_bolbradesco_rejection">No fue posible procesar su pago</string>
     <string name="mpsdk_bolbradesco_rejection_text">Intenta otro medio de pago</string>
 
-    <string name="mpsdk_empty_string"> </string>
+    <string name="mpsdk_empty_string"></string>
 </resources>

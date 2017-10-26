@@ -1,24 +1,30 @@
 package com.mercadopago.paymentresult;
 
+import com.mercadopago.R;
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionsListener;
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.Instruction;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.providers.PaymentResultProvider;
-import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ErrorUtil;
 
 import java.math.BigDecimal;
-
-import static com.mercadopago.util.TextUtils.isEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView, PaymentResultProvider> implements ActionsListener {
     private Boolean discountEnabled;
     private PaymentResult paymentResult;
     private Site site;
     private BigDecimal amount;
+    private PaymentResultScreenPreference paymentResultScreenPreference;
 
     public void initialize() {
         try {
@@ -30,59 +36,43 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     }
 
     private void validateParameters() {
-        if (paymentResult == null) {
-            throw new IllegalStateException("payment result is null");
-        } else if (paymentResult.getPaymentData() == null) {
-            throw new IllegalStateException("payment data is null");
-        }
-        if (!isStatusValid()) {
-            throw new IllegalStateException("payment not does not have status");
+        if (!isPaymentResultValid()) {
+            throw new IllegalStateException("payment result is invalid");
+        } else if (!isPaymentMethodValid()) {
+            throw new IllegalStateException("payment data is invalid");
+        } else if (!isPaymentMethodOffValid()) {
+            throw new IllegalStateException("payment id is invalid");
         }
     }
 
-    private void onValidStart() {
-        if (paymentResult.getPaymentStatusDetail() != null && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) {
-//            getView().showInstructions(site, amount, paymentResult);
-        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
-                paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) {
-//            getView().showPending(paymentResult);
-        } else if (isCardOrAccountMoney()) {
-            startPaymentsOnResult();
-        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-//            getView().showRejection(paymentResult);
-        }
+    protected void onValidStart() {
+        getView().setPropPaymentResult(paymentResult, paymentResultScreenPreference);
+        checkGetInstructions();
     }
 
     protected void onInvalidStart(String errorDetail) {
         getView().showError(getResourcesProvider().getStandardErrorMessage(), errorDetail);
     }
 
-    private boolean isCardOrAccountMoney() {
-        return MercadoPagoUtil.isCard(paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId()) ||
-                paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
+    private boolean isPaymentResultValid() {
+        return paymentResult != null && paymentResult.getPaymentStatus() != null && paymentResult.getPaymentStatusDetail() != null;
     }
 
-    private void startPaymentsOnResult() {
-        if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
-//            getView().showCongrats(site, amount, paymentResult, discountEnabled);
-        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-            if (isStatusDetailValid() && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
-//                getView().showCallForAuthorize(site, paymentResult);
-            } else {
-//                getView().showRejection(paymentResult);
-            }
-        } else {
-            getView().showError(getResourcesProvider().getStandardErrorMessage());
-        }
+    private boolean isPaymentMethodValid() {
+        return paymentResult != null && paymentResult.getPaymentData() != null && paymentResult.getPaymentData().getPaymentMethod() != null &&
+                paymentResult.getPaymentData().getPaymentMethod().getId() != null && !paymentResult.getPaymentData().getPaymentMethod().getId().isEmpty() &&
+                paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId() != null && !paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId().isEmpty() &&
+                paymentResult.getPaymentData().getPaymentMethod().getName() != null && !paymentResult.getPaymentData().getPaymentMethod().getName().isEmpty();
     }
 
-
-    private Boolean isStatusValid() {
-        return !isEmpty(paymentResult.getPaymentStatus());
+    private boolean isPaymentMethodOffValid() {
+        return !isPaymentMethodOff() || paymentResult.getPaymentId() != null;
     }
 
-    private Boolean isStatusDetailValid() {
-        return !isEmpty(paymentResult.getPaymentStatusDetail());
+    private boolean isPaymentMethodOff() {
+        String paymentStatus = paymentResult.getPaymentStatus();
+        String paymentStatusDetail = paymentResult.getPaymentStatusDetail();
+        return paymentStatus.equals(Payment.StatusCodes.STATUS_PENDING) && paymentStatusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
     }
 
     public void setDiscountEnabled(Boolean discountEnabled) {
@@ -91,7 +81,6 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
 
     public void setPaymentResult(PaymentResult paymentResult) {
         this.paymentResult = paymentResult;
-        getView().setPropPaymentResult(paymentResult);
     }
 
     public void setSite(Site site) {
@@ -102,8 +91,112 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         this.amount = amount;
     }
 
+    public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
+        this.paymentResultScreenPreference = paymentResultScreenPreference;
+    }
+
+    private void checkGetInstructions() {
+        if (isPaymentMethodOff()) {
+            getInstructionsAsync(paymentResult.getPaymentId(), paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId());
+        }
+    }
+
+    private void getInstructionsAsync(Long paymentId, String paymentTypeId) {
+        getResourcesProvider().getInstructionsAsync(paymentId, paymentTypeId, new OnResourcesRetrievedCallback<Instructions>() {
+            @Override
+            public void onSuccess(Instructions instructions) {
+                List<Instruction> instructionsList
+                        = instructions.getInstructions() == null ? new ArrayList<Instruction>() : instructions.getInstructions();
+                if (instructionsList.isEmpty()) {
+//                    ErrorUtil.startErrorActivity(mActivity, mActivity.getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentTypeId, false, mMerchantPublicKey);
+                } else {
+                    resolveInstructions(instructionsList);
+                }
+            }
+
+            @Override
+            public void onFailure(MercadoPagoError error) {
+                //TODO revisar
+//                if (viewAttached()) {
+//                    getView().showError(error, ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
+//
+//                    setFailureRecovery(new FailureRecovery() {
+//                        @Override
+//                        public void recover() {
+//                            getInstructionsAsync();
+//                        }
+//                    });
+//                }
+            }
+        });
+    }
+
+    private void resolveInstructions(List<Instruction> instructionsList) {
+        Instruction instruction = getInstruction(instructionsList);
+        if (instruction == null) {
+//            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentTypeId, false, mMerchantPublicKey);
+        } else {
+            getView().setPropInstruction(instruction);
+        }
+//        stopLoading();
+    }
+
+    private Instruction getInstruction(List<Instruction> instructions) {
+        Instruction instruction;
+        if (instructions.size() == 1) {
+            instruction = instructions.get(0);
+        } else {
+            instruction = getInstructionForType(instructions, paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId());
+        }
+        return instruction;
+    }
+
+    private Instruction getInstructionForType(List<Instruction> instructions, String paymentTypeId) {
+        Instruction instructionForType = null;
+        for (Instruction instruction : instructions) {
+            if (instruction.getType().equals(paymentTypeId)) {
+                instructionForType = instruction;
+                break;
+            }
+        }
+        return instructionForType;
+    }
+
     @Override
     public void onAction(Action action) {
 
     }
+
+//    private void onValidStart() {
+//        if (paymentResult.getPaymentStatusDetail() != null && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) {
+////            getView().showInstructions(site, amount, paymentResult);
+//        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
+//                paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) {
+////            getView().showPending(paymentResult);
+//        } else if (isCardOrAccountMoney()) {
+//            startPaymentsOnResult();
+//        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
+////            getView().showRejection(paymentResult);
+//        }
+//    }
+
+//    private boolean isCardOrAccountMoney() {
+//        return MercadoPagoUtil.isCard(paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId()) ||
+//                paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
+//    }
+//
+//    private void startPaymentsOnResult() {
+//        if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
+////            getView().showCongrats(site, amount, paymentResult, discountEnabled);
+//        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
+//            if (isStatusDetailValid() && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+////                getView().showCallForAuthorize(site, paymentResult);
+//            } else {
+////                getView().showRejection(paymentResult);
+//            }
+//        } else {
+//            getView().showError(getResourcesProvider().getStandardErrorMessage());
+//        }
+//    }
+
 }

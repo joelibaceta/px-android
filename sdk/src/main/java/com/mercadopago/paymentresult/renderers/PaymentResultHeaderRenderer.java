@@ -23,6 +23,7 @@ public class PaymentResultHeaderRenderer extends Renderer<PaymentResultHeaderCom
     private Renderer iconRenderer;
     private ViewGroup iconParentViewGroup;
     private TextView labelTextView;
+//    Formatter
 
     @Override
     public View render() {
@@ -60,16 +61,12 @@ public class PaymentResultHeaderRenderer extends Renderer<PaymentResultHeaderCom
     }
 
     private void renderTitle() {
-        titleTextView.setText(component.getProps().title);
+
+        setText(titleTextView, component.getProps().title);
     }
 
     private void renderLabel() {
-        String label = context.getResources().getString(component.getProps().label);
-        if (label.isEmpty()) {
-            labelTextView.setVisibility(View.GONE);
-        } else {
-            labelTextView.setText(label);
-        }
+        setText(labelTextView, component.getProps().label);
     }
 
 

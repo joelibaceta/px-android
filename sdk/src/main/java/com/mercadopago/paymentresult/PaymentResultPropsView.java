@@ -1,10 +1,8 @@
 package com.mercadopago.paymentresult;
 
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpView;
-
-import java.math.BigDecimal;
 
 public interface PaymentResultPropsView extends MvpView {
 
@@ -22,5 +20,7 @@ public interface PaymentResultPropsView extends MvpView {
 
     void showError(String errorMessage, String errorDetail);
 
-    void setPropPaymentResult(PaymentResult paymentResult);
+    void setPropPaymentResult(final PaymentResult paymentResult, final PaymentResultScreenPreference paymentResultScreenPreference);
+
+    void setPropInstruction(final Instruction instruction);
 }

@@ -6,7 +6,6 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
-import com.mercadopago.providers.PaymentResultProvider;
 
 import junit.framework.Assert;
 

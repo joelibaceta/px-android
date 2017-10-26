@@ -26,15 +26,15 @@ public class PaymentResultRenderer extends Renderer<PaymentResultContainer> {
         containerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_container, null, false);
         parentViewGroup = (ViewGroup) containerView.findViewById(R.id.mpsdkPaymentResultContainer);
 
-        headerRenderer = RendererFactory.create(context, component.getHeaderComponent());
+        headerRenderer = RendererFactory.create(context, component.headerComponent);
         View header = renderHeader();
         this.parentViewGroup.addView(header);
 
-        bodyRenderer = RendererFactory.create(context, component.getBodyComponent());
+        bodyRenderer = RendererFactory.create(context, component.bodyComponent);
         View body = renderBody();
         this.parentViewGroup.addView(body);
 
-        footerRenderer = RendererFactory.create(context, component.getFooterComponent());
+        footerRenderer = RendererFactory.create(context, component.footerComponent);
         View footer = renderFooter();
         this.parentViewGroup.addView(footer);
 

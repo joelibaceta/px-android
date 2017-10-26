@@ -1,10 +1,14 @@
 package com.mercadopago.components;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import static android.R.attr.label;
 
 /**
  * Created by vaserber on 10/20/17.
@@ -40,5 +44,27 @@ public abstract class Renderer<T extends Component> {
                 1.0f
         );
         viewGroup.setLayoutParams(params);
+    }
+
+    protected void setText(final TextView view, final int id) {
+        try {
+            String text = context.getResources().getString(id);
+            if (text.isEmpty()) {
+                view.setVisibility(View.GONE);
+            } else {
+                view.setText(text);
+            }
+        } catch (Resources.NotFoundException ex) {
+            //Todo: add to tracker
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    protected void setText(final TextView view, String text) {
+        if (text.isEmpty()) {
+            view.setVisibility(View.GONE);
+        } else {
+            view.setText(text);
+        }
     }
 }

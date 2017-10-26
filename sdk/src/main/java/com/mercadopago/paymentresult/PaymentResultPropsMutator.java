@@ -2,6 +2,7 @@ package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.Mutator;
 import com.mercadopago.components.MutatorPropsListener;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
 
@@ -32,10 +33,19 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
     }
 
     @Override
-    public void setPropPaymentResult(final PaymentResult paymentResult) {
+    public void setPropPaymentResult(final PaymentResult paymentResult, final PaymentResultScreenPreference paymentResultScreenPreference) {
         props = props.toBuilder()
                 .setPaymentResult(paymentResult)
+                .setPreference(paymentResultScreenPreference)
                 .setHeaderMode("wrap")
+                .build();
+        notifyPropsChanged();
+    }
+
+    @Override
+    public void setPropInstruction(Instruction instruction) {
+        props = props.toBuilder()
+                .setInstruction(instruction)
                 .build();
         notifyPropsChanged();
     }

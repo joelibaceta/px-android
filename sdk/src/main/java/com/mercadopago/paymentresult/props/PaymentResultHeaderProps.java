@@ -1,6 +1,7 @@
 package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 
 
 /**
@@ -13,10 +14,11 @@ public class PaymentResultHeaderProps {
     public final Integer background;
     public final Integer iconImage;
     public final Integer badgeImage;
-    public final Integer title;
+    public final String title;
     public final Integer label;
+//    public final AmountFormatter (title, amount, currency)
 
-    public PaymentResultHeaderProps(String height, Integer background, Integer iconImage, Integer badgeImage, Integer title, Integer label) {
+    public PaymentResultHeaderProps(String height, Integer background, Integer iconImage, Integer badgeImage, String title, Integer label) {
         this.height = height;
         this.background = background;
         this.iconImage = iconImage;
@@ -46,11 +48,13 @@ public class PaymentResultHeaderProps {
 
     public static class Builder {
 
+        //TODO definir los valores default
+
         public String height;
         public Integer background;
         public Integer iconImage;
         public Integer badgeImage;
-        public Integer title;
+        public String title;
         public Integer label;
 
         public Builder setBackground(Integer background) {
@@ -73,12 +77,12 @@ public class PaymentResultHeaderProps {
             return this;
         }
 
-        public Builder setTitle(Integer title) {
+        public Builder setTitle(@NonNull final String title) {
             this.title = title;
             return this;
         }
 
-        public Builder setLabel(Integer label) {
+        public Builder setLabel(@StringRes @NonNull final Integer label) {
             this.label = label;
             return this;
         }
