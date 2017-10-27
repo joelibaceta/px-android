@@ -123,13 +123,9 @@ dependencies {
     compile "com.squareup.okhttp3:logging-interceptor:$okhttp"
     compile "com.squareup.retrofit2:retrofit:$retrofit"
     compile "com.squareup.retrofit2:converter-gson:$retrofit"
-    compile ("com.squareup.picasso:picasso:$picasso") {
-        exclude group: 'com.android.support'
-    }
+    compile "com.squareup.picasso:picasso:$picasso"
 
     compile project(':px-tracking')
-    //devCompile project(path: ':px-tracking', configuration:'devDebug')
-    //prodCompile project(path: ':px-tracking', configuration:'prodDebug')
 }
 
 configurations {

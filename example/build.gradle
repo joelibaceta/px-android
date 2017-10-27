@@ -41,14 +41,16 @@ android {
             dimension "environment"
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':sdk')
-
-    //devCompile project(path: ':sdk', configuration:'devDebug')
-    //prodCompile project(path: ':sdk', configuration:'prodDebug')
 
     compile "com.android.support:appcompat-v7:$build_tools_version"
     compile "com.android.support:design:$build_tools_version"
