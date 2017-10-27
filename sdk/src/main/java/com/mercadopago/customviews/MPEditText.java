@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -16,22 +18,17 @@ public class MPEditText extends EditText {
     private String mTypeName;
     private int mErrorColor;
 
-    public MPEditText(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init();
-        setErrorColor(context, attrs, defStyle);
+    public MPEditText(final Context context) {
+        this(context, null);
     }
 
-    public MPEditText(Context context, AttributeSet attrs) {
+    public MPEditText(final Context context, final AttributeSet attrs) {
         this(context, attrs, android.R.attr.editTextStyle);
     }
 
-    public MPEditText(Context context) {
-        super(context);
-        init();
-    }
-
-    private void init() {
+    public MPEditText(final Context context, final AttributeSet attrs, final int defStyle) {
+        super(context, attrs, defStyle);
+        setErrorColor(context, attrs, defStyle);
         if (!isInEditMode()) {
             if (mTypeName == null) {
                 mTypeName = "fonts/Roboto-Regular.ttf";
@@ -39,7 +36,6 @@ public class MPEditText extends EditText {
             Typeface tf = FontCache.createTypeface(mTypeName, getContext());
             setTypeface(tf);
         }
-
     }
 
     private void setErrorColor(Context context, AttributeSet attrs, int defStyle) {
