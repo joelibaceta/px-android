@@ -33,4 +33,8 @@ public interface PaymentResultProvider extends ResourcesProvider {
     String getRejectedBadFilledOther();
 
     String getEmptyText();
+
+    String getPendingLabel();
+
+    String getRejectionLabel();
 }

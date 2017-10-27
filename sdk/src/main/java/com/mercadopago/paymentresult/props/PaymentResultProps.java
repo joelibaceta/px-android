@@ -1,12 +1,12 @@
 package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
-import android.text.Spanned;
 
 import com.mercadopago.model.Instruction;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.paymentresult.PaymentResultScreenPreference;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.paymentresult.model.AmountFormat;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 /**
  * Created by vaserber on 10/20/17.
@@ -18,19 +18,23 @@ public class PaymentResultProps {
     public final PaymentResultScreenPreference paymentResultScreenPreference;
     public final Instruction instruction;
     public final String headerMode; //"wrap", "stretch"
+    public final AmountFormat amountFormat;
 
     public PaymentResultProps() {
         this.paymentResult = null;
         this.paymentResultScreenPreference = null;
         this.instruction = null;
         this.headerMode = "wrap";
+        this.amountFormat = null;
     }
 
-    public PaymentResultProps(PaymentResult paymentResult, PaymentResultScreenPreference paymentResultScreenPreference, Instruction instruction, String headerMode) {
+    public PaymentResultProps(PaymentResult paymentResult, PaymentResultScreenPreference paymentResultScreenPreference,
+                              Instruction instruction, String headerMode, AmountFormat amountFormat) {
         this.paymentResult = paymentResult;
         this.paymentResultScreenPreference = paymentResultScreenPreference;
         this.instruction = instruction;
         this.headerMode = headerMode;
+        this.amountFormat = amountFormat;
     }
 
     public PaymentResultProps(@NonNull final Builder builder) {
@@ -38,6 +42,7 @@ public class PaymentResultProps {
         this.headerMode = builder.headerMode;
         this.paymentResultScreenPreference = builder.paymentResultScreenPreference;
         this.instruction = builder.instruction;
+        this.amountFormat = builder.amountFormat;
     }
 
     public Builder toBuilder() {
@@ -45,17 +50,147 @@ public class PaymentResultProps {
                 .setPaymentResult(this.paymentResult)
                 .setPreference(this.paymentResultScreenPreference)
                 .setHeaderMode(this.headerMode)
-                .setInstruction(this.instruction);
+                .setInstruction(this.instruction)
+                .setAmountFormat(this.amountFormat);
     }
 
     public boolean hasCustomizedTitle() {
-        //TODO revisar que para el status del pago, la preferencia tenga un titulo seteado
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedTitleValidState()) {
+                return paymentResultScreenPreference.getApprovedTitle() != null && !paymentResultScreenPreference.getApprovedTitle().isEmpty();
+            } else if (isPendingTitleValidState()) {
+                return paymentResultScreenPreference.getPendingTitle() != null && !paymentResultScreenPreference.getPendingTitle().isEmpty();
+            } else if (isRejectedTitleValidState()) {
+                return paymentResultScreenPreference.getRejectedTitle() != null && !paymentResultScreenPreference.getRejectedTitle().isEmpty();
+            }
+        }
         return false;
     }
 
     public String getPreferenceTitle() {
-        //TODO devolver el titulo para el estado del pago
-        return paymentResultScreenPreference.getApprovedTitle();
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedTitleValidState()) {
+                return paymentResultScreenPreference.getApprovedTitle();
+            } else if (isPendingTitleValidState()) {
+                return paymentResultScreenPreference.getPendingTitle();
+            } else if (isRejectedTitleValidState()) {
+                return paymentResultScreenPreference.getRejectedTitle();
+            }
+        }
+        return "";
+    }
+
+    private boolean isApprovedTitleValidState() {
+        return isStatusApproved();
+    }
+
+    private boolean isStatusApproved() {
+        return paymentResult != null && paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED);
+    }
+
+    private boolean isStatusRejected() {
+        return paymentResult != null && paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED);
+    }
+
+    private boolean isPendingTitleValidState() {
+        return paymentResult != null && ((paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)
+                && !paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) ||
+                paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS));
+    }
+
+    private boolean isRejectedTitleValidState() {
+        return isStatusRejected();
+    }
+
+    public boolean hasCustomizedLabel() {
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedLabelValidState()) {
+                return paymentResultScreenPreference.getApprovedLabelText() != null && !paymentResultScreenPreference.getApprovedLabelText().isEmpty();
+            } else if (isRejectedLabelValidState()) {
+                return !paymentResultScreenPreference.isRejectedLabelTextEnabled();
+            }
+        }
+        return false;
+    }
+
+    public String getPreferenceLabel() {
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedLabelValidState()) {
+                return paymentResultScreenPreference.getApprovedLabelText();
+            } else if (isRejectedLabelValidState() && !paymentResultScreenPreference.isRejectedLabelTextEnabled()) {
+                return "";
+            }
+        }
+        return "";
+    }
+
+    private boolean isApprovedLabelValidState() {
+        return isStatusApproved();
+    }
+
+    private boolean isRejectedLabelValidState() {
+        return isRejectedTitleValidState();
+    }
+
+    public boolean hasCustomizedBadge() {
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedBadgeValidState()) {
+                return paymentResultScreenPreference.getApprovedBadge() != null && !paymentResultScreenPreference.getApprovedBadge().isEmpty();
+            }
+        }
+        return false;
+    }
+
+    public String getPreferenceBadge() {
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedBadgeValidState()) {
+                return paymentResultScreenPreference.getApprovedBadge();
+            }
+        }
+        return "";
+    }
+
+    private boolean isApprovedBadgeValidState() {
+        return isStatusApproved();
+    }
+
+    public boolean hasCustomizedIcon() {
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedIconValidState()) {
+                return paymentResultScreenPreference.getApprovedIcon() != null;
+            } else if (isPendingIconValidState()) {
+                return paymentResultScreenPreference.getPendingIcon() != null;
+            } else if (isRejectedIconValidState()) {
+                return paymentResultScreenPreference.getRejectedIcon() != null;
+            }
+        }
+        return false;
+    }
+
+    public int getPreferenceIcon() {
+        if (paymentResultScreenPreference != null) {
+            if (isApprovedIconValidState()) {
+                return paymentResultScreenPreference.getApprovedIcon();
+            } else if (isPendingIconValidState()) {
+                return paymentResultScreenPreference.getPendingIcon();
+            } else if (isRejectedIconValidState()) {
+                return paymentResultScreenPreference.getRejectedIcon();
+            }
+        }
+        return 0;
+    }
+
+    private boolean isApprovedIconValidState() {
+        return isStatusApproved();
+    }
+
+    private boolean isPendingIconValidState() {
+        return paymentResult != null && (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)
+                && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
+    }
+
+    private boolean isRejectedIconValidState() {
+        return isStatusRejected();
     }
 
     public boolean hasInstructions() {
@@ -63,7 +198,11 @@ public class PaymentResultProps {
     }
 
     public String getInstructionsTitle() {
-        return instruction.getTitle();
+        if (hasInstructions()) {
+            return instruction.getTitle();
+        } else {
+            return "";
+        }
     }
 
     public class Builder {
@@ -72,6 +211,7 @@ public class PaymentResultProps {
         public PaymentResultScreenPreference paymentResultScreenPreference;
         public Instruction instruction;
         public String headerMode;
+        public AmountFormat amountFormat;
 
         public Builder setPaymentResult(PaymentResult paymentResult) {
             this.paymentResult = paymentResult;
@@ -90,6 +230,11 @@ public class PaymentResultProps {
 
         public Builder setInstruction(Instruction instruction) {
             this.instruction = instruction;
+            return this;
+        }
+
+        public Builder setAmountFormat(AmountFormat amountFormat) {
+            this.amountFormat = amountFormat;
             return this;
         }
 

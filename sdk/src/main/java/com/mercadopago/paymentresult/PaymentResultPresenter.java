@@ -1,7 +1,5 @@
 package com.mercadopago.paymentresult;
 
-import com.mercadopago.R;
-import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionsListener;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -12,8 +10,8 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.ErrorUtil;
+import com.mercadopago.paymentresult.model.AmountFormat;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,8 +38,12 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
             throw new IllegalStateException("payment result is invalid");
         } else if (!isPaymentMethodValid()) {
             throw new IllegalStateException("payment data is invalid");
-        } else if (!isPaymentMethodOffValid()) {
-            throw new IllegalStateException("payment id is invalid");
+        } else if (isPaymentMethodOff()) {
+            if (!isPaymentIdValid()) {
+                throw new IllegalStateException("payment id is invalid");
+            } else if(!isSiteValid()) {
+                throw new IllegalStateException("site is invalid");
+            }
         }
     }
 
@@ -65,8 +67,12 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
                 paymentResult.getPaymentData().getPaymentMethod().getName() != null && !paymentResult.getPaymentData().getPaymentMethod().getName().isEmpty();
     }
 
-    private boolean isPaymentMethodOffValid() {
-        return !isPaymentMethodOff() || paymentResult.getPaymentId() != null;
+    private boolean isPaymentIdValid() {
+        return paymentResult.getPaymentId() != null;
+    }
+
+    private boolean isSiteValid() {
+        return site != null && site.getCurrencyId() != null && !site.getCurrencyId().isEmpty();
     }
 
     private boolean isPaymentMethodOff() {
@@ -136,7 +142,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         if (instruction == null) {
 //            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentTypeId, false, mMerchantPublicKey);
         } else {
-            getView().setPropInstruction(instruction);
+            getView().setPropInstruction(instruction, new AmountFormat(site.getCurrencyId(), amount));
         }
 //        stopLoading();
     }

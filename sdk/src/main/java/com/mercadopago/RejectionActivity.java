@@ -21,7 +21,7 @@ import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.paymentresult.PaymentResultScreenPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
@@ -242,8 +242,8 @@ public class RejectionActivity extends MercadoPagoBaseActivity implements TimerO
     }
 
     private void setHeaderIcon() {
-        if (mPaymentResultScreenPreference.getRejectedIconName() != null) {
-            Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIconName());
+        if (mPaymentResultScreenPreference.getRejectedIcon() != null) {
+            Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getRejectedIcon());
             mHeaderIcon.setImageDrawable(image);
         }
     }

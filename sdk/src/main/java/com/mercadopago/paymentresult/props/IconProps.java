@@ -10,10 +10,10 @@ import com.mercadopago.model.PaymentResult;
 
 public class IconProps {
 
-    public final Integer iconImage;
-    public final Integer badgeImage;
+    public final int iconImage;
+    public final int badgeImage;
 
-    public IconProps(Integer iconImage, Integer badgeImage) {
+    public IconProps(int iconImage, int badgeImage) {
         this.iconImage = iconImage;
         this.badgeImage = badgeImage;
     }
@@ -31,15 +31,15 @@ public class IconProps {
 
     public static class Builder {
 
-        public Integer iconImage;
-        public Integer badgeImage;
+        public int iconImage;
+        public int badgeImage;
 
-        public Builder setIconImage(Integer iconImage) {
+        public Builder setIconImage(int iconImage) {
             this.iconImage = iconImage;
             return this;
         }
 
-        public Builder setBadgeImage(Integer badgeImage) {
+        public Builder setBadgeImage(int badgeImage) {
             this.badgeImage = badgeImage;
             return this;
         }

@@ -3,6 +3,8 @@ package com.mercadopago.paymentresult.props;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
+import com.mercadopago.paymentresult.model.AmountFormat;
+
 
 /**
  * Created by vaserber on 10/20/17.
@@ -11,20 +13,22 @@ import android.support.annotation.StringRes;
 public class PaymentResultHeaderProps {
 
     public final String height;
-    public final Integer background;
-    public final Integer iconImage;
-    public final Integer badgeImage;
+    public final int background;
+    public final int iconImage;
+    public final int badgeImage;
     public final String title;
-    public final Integer label;
-//    public final AmountFormatter (title, amount, currency)
+    public final String label;
+    public final AmountFormat amountFormat;
 
-    public PaymentResultHeaderProps(String height, Integer background, Integer iconImage, Integer badgeImage, String title, Integer label) {
+    public PaymentResultHeaderProps(String height, int background, int iconImage,
+                                    int badgeImage, String title, String label, AmountFormat formatter) {
         this.height = height;
         this.background = background;
         this.iconImage = iconImage;
         this.badgeImage = badgeImage;
         this.title = title;
         this.label = label;
+        this.amountFormat = formatter;
     }
 
     public PaymentResultHeaderProps(@NonNull final Builder builder) {
@@ -34,6 +38,7 @@ public class PaymentResultHeaderProps {
         this.badgeImage = builder.badgeImage;
         this.title = builder.title;
         this.label = builder.label;
+        this.amountFormat = builder.amountFormat;
     }
 
     public Builder toBuilder() {
@@ -43,7 +48,8 @@ public class PaymentResultHeaderProps {
                 .setIconImage(this.iconImage)
                 .setBadgeImage(this.badgeImage)
                 .setTitle(this.title)
-                .setLabel(this.label);
+                .setLabel(this.label)
+                .setAmountFormat(this.amountFormat);
     }
 
     public static class Builder {
@@ -51,23 +57,24 @@ public class PaymentResultHeaderProps {
         //TODO definir los valores default
 
         public String height;
-        public Integer background;
-        public Integer iconImage;
-        public Integer badgeImage;
+        public int background;
+        public int iconImage;
+        public int badgeImage;
         public String title;
-        public Integer label;
+        public String label;
+        public AmountFormat amountFormat;
 
-        public Builder setBackground(Integer background) {
+        public Builder setBackground(int background) {
             this.background = background;
             return this;
         }
 
-        public Builder setIconImage(Integer iconImage) {
+        public Builder setIconImage(int iconImage) {
             this.iconImage = iconImage;
             return this;
         }
 
-        public Builder setBadgeImage(Integer badgeImage) {
+        public Builder setBadgeImage(int badgeImage) {
             this.badgeImage = badgeImage;
             return this;
         }
@@ -82,8 +89,13 @@ public class PaymentResultHeaderProps {
             return this;
         }
 
-        public Builder setLabel(@StringRes @NonNull final Integer label) {
+        public Builder setLabel(@NonNull final String label) {
             this.label = label;
+            return this;
+        }
+
+        public Builder setAmountFormat(AmountFormat amountFormat) {
+            this.amountFormat = amountFormat;
             return this;
         }
 

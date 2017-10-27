@@ -28,7 +28,7 @@ import com.mercadopago.model.PaymentResultAction;
 import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.paymentresult.PaymentResultScreenPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.px_tracking.model.ScreenViewEvent;
@@ -219,8 +219,8 @@ public class PendingActivity extends MercadoPagoBaseActivity implements TimerObs
             } else {
                 hidePendingContentText();
             }
-            if (mPaymentResultScreenPreference.getPendingIconName() != null) {
-                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getPendingIconName());
+            if (mPaymentResultScreenPreference.getPendingIcon() != null) {
+                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getPendingIcon());
                 mHeaderIcon.setImageDrawable(image);
             }
             if (!mPaymentResultScreenPreference.isPendingSecondaryExitButtonEnabled() ||

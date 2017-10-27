@@ -21,6 +21,7 @@ import com.mercadopago.paymentresult.renderers.PaymentResultBodyRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultFooterRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultHeaderRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultRenderer;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 

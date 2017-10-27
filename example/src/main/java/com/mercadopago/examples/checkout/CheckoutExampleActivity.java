@@ -18,9 +18,10 @@ import com.mercadopago.examples.utils.ColorPickerDialog;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Payment;
+import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.DecorationPreference;
-import com.mercadopago.paymentresult.PaymentResultScreenPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -71,6 +72,12 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     private void startMercadoPagoCheckout() {
         PaymentResultScreenPreference paymentResultScreenPreference = new PaymentResultScreenPreference.Builder()
                 .setApprovedTitle("Lalala")
+                .setPendingTitle("Lilili")
+                .setRejectedTitle("Lololo")
+                .setApprovedLabelText("Pipipi...")
+                .disableRejectedLabelText()
+                .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
+//                .setApprovedHeaderIcon(R.drawable.prueba)
                 .build();
 
         new MercadoPagoCheckout.Builder()

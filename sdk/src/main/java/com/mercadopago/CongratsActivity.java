@@ -31,7 +31,7 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.ReviewSubscriber;
 import com.mercadopago.model.Reviewable;
 import com.mercadopago.model.Site;
-import com.mercadopago.paymentresult.PaymentResultScreenPreference;
+import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.px_tracking.utils.TrackingUtil;
 import com.mercadopago.tracker.MPTrackingContext;
@@ -301,8 +301,8 @@ public class CongratsActivity extends MercadoPagoBaseActivity implements ReviewS
             } else {
                 hidePaymentMethod();
             }
-            if (mPaymentResultScreenPreference.getApprovedIconName() != null) {
-                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getApprovedIconName());
+            if (mPaymentResultScreenPreference.getApprovedIcon() != null) {
+                Drawable image = ContextCompat.getDrawable(this, mPaymentResultScreenPreference.getApprovedIcon());
 
                 mHeaderIcon.setImageDrawable(image);
             }

@@ -1,6 +1,7 @@
 package com.mercadopago.paymentresult.renderers;
 
 import android.support.v4.content.ContextCompat;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.paymentresult.components.PaymentResultHeaderComponent;
+import com.mercadopago.util.CurrenciesUtil;
 
 /**
  * Created by vaserber on 10/20/17.
@@ -23,7 +25,6 @@ public class PaymentResultHeaderRenderer extends Renderer<PaymentResultHeaderCom
     private Renderer iconRenderer;
     private ViewGroup iconParentViewGroup;
     private TextView labelTextView;
-//    Formatter
 
     @Override
     public View render() {
@@ -61,8 +62,15 @@ public class PaymentResultHeaderRenderer extends Renderer<PaymentResultHeaderCom
     }
 
     private void renderTitle() {
-
-        setText(titleTextView, component.getProps().title);
+        if (component.getProps().amountFormat == null) {
+            setText(titleTextView, component.getProps().title);
+        } else {
+            Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>",
+                    component.getProps().amountFormat.getAmount(),
+                    component.getProps().amountFormat.getCurrencyId(),
+                    component.getProps().title, false, true);
+            titleTextView.setText(formattedTitle);
+        }
     }
 
     private void renderLabel() {

@@ -105,4 +105,14 @@ public class PaymentResultProviderImpl implements PaymentResultProvider {
     public String getEmptyText() {
         return context.getString(R.string.mpsdk_empty_string);
     }
+
+    @Override
+    public String getPendingLabel() {
+        return context.getString(R.string.mpsdk_pending_label);
+    }
+
+    @Override
+    public String getRejectionLabel() {
+        return context.getString(R.string.mpsdk_rejection_label);
+    }
 }

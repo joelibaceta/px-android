@@ -1,4 +1,4 @@
-package com.mercadopago.paymentresult;
+package com.mercadopago.preferences;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
@@ -24,19 +24,21 @@ public class PaymentResultScreenPreference {
     private Integer titleBackgroundColor;
     private String approvedTitle;
     private String approvedSubtitle;
-    private Integer approvedIconName;
+    private Integer approvedIcon;
+    private String approvedLabelText;
+    private @Badge.ApprovedBadges String approvedBadge;
     private String pendingTitle;
     private String pendingSubtitle;
     private String pendingContentTitle;
     private String pendingContentText;
-    private Integer pendingIconName;
+    private Integer pendingIcon;
     private String exitButtonTitle;
     private String secondaryPendingExitButtonTitle;
     private String secondaryCongratsExitButtonTitle;
     private String secondaryRejectedExitButtonTitle;
     private String rejectedTitle;
     private String rejectedSubtitle;
-    private Integer rejectedIconName;
+    private Integer rejectedIcon;
     private String rejectedIconSubtext;
     private String rejectedContentTitle;
     private String rejectedContentText;
@@ -51,6 +53,7 @@ public class PaymentResultScreenPreference {
     private boolean enableApprovedReceipt = true;
     private boolean enableApprovedAmount = true;
     private boolean enableApprovedPaymentMethodInfo = true;
+    private boolean enableRejectedLabelText = true;
     private transient Map<ContentLocation, List<Reviewable>> congratsReviewables;
     private transient List<Reviewable> pendingReviewables;
 
@@ -63,12 +66,14 @@ public class PaymentResultScreenPreference {
         this.titleBackgroundColor = builder.titleBackgroundColor;
         this.approvedTitle = builder.approvedTitle;
         this.approvedSubtitle = builder.approvedSubtitle;
-        this.approvedIconName = builder.approvedIcon;
+        this.approvedIcon = builder.approvedIcon;
+        this.approvedLabelText = builder.approvedLabelText;
+        this.approvedBadge = builder.approvedBadge;
         this.pendingTitle = builder.pendingTitle;
         this.pendingSubtitle = builder.pendingSubtitle;
         this.pendingContentTitle = builder.pendingContentTitle;
         this.pendingContentText = builder.pendingContentText;
-        this.pendingIconName = builder.pendingIcon;
+        this.pendingIcon = builder.pendingIcon;
         this.exitButtonTitle = builder.exitButtonTitle;
         this.secondaryPendingExitButtonTitle = builder.secondaryPendingExitButtonTitle;
         this.secondaryPendingExitResultCode = builder.secondaryPendingExitResultCode;
@@ -78,7 +83,7 @@ public class PaymentResultScreenPreference {
         this.secondaryRejectedExitResultCode = builder.secondaryRejectedExitResultCode;
         this.rejectedTitle = builder.rejectedTitle;
         this.rejectedSubtitle = builder.rejectedSubtitle;
-        this.rejectedIconName = builder.rejectedIcon;
+        this.rejectedIcon = builder.rejectedIcon;
         this.rejectedIconSubtext = builder.rejectedIconSubtext;
         this.rejectedContentTitle = builder.rejectedContentTitle;
         this.rejectedContentText = builder.rejectedContentText;
@@ -96,6 +101,7 @@ public class PaymentResultScreenPreference {
         this.enableApprovedReceipt = builder.enableApprovedReceipt;
         this.enableApprovedAmount = builder.enableApprovedAmount;
         this.enableApprovedPaymentMethodInfo = builder.enableApprovedPaymentMethodInfo;
+        this.enableRejectedLabelText = builder.enableRejectedLabelText;
         this.pendingReviewables = builder.pendingReviewables;
 
         this.congratsReviewables = new HashMap<>();
@@ -133,8 +139,16 @@ public class PaymentResultScreenPreference {
         return this.approvedSubtitle;
     }
 
-    public Integer getApprovedIconName() {
-        return approvedIconName;
+    public Integer getApprovedIcon() {
+        return approvedIcon;
+    }
+
+    public String getApprovedLabelText() {
+        return approvedLabelText;
+    }
+
+    public @Badge.ApprovedBadges String getApprovedBadge() {
+        return approvedBadge;
     }
 
     public String getPendingTitle() {
@@ -189,16 +203,16 @@ public class PaymentResultScreenPreference {
         return rejectedContentText;
     }
 
-    public Integer getRejectedIconName() {
-        return rejectedIconName;
+    public Integer getRejectedIcon() {
+        return rejectedIcon;
     }
 
     public String getRejectedIconSubtext() {
         return rejectedIconSubtext;
     }
 
-    public Integer getPendingIconName() {
-        return pendingIconName;
+    public Integer getPendingIcon() {
+        return pendingIcon;
     }
 
     public boolean isApprovedReceiptEnabled() {
@@ -245,6 +259,10 @@ public class PaymentResultScreenPreference {
         return this.enableRejectedIconSubtext;
     }
 
+    public boolean isRejectedLabelTextEnabled() {
+        return this.enableRejectedLabelText;
+    }
+
     public Integer getSecondaryRejectedExitResultCode() {
         return secondaryRejectedExitResultCode;
     }
@@ -269,7 +287,7 @@ public class PaymentResultScreenPreference {
 
         private String approvedTitle;
         private String approvedLabelText;
-        private @Badge.ApprovedBadges Badge approvedBadge;
+        private @Badge.ApprovedBadges String approvedBadge;
 
         private Integer titleBackgroundColor;
         private String approvedSubtitle;
@@ -316,59 +334,54 @@ public class PaymentResultScreenPreference {
             this.pendingReviewables = new ArrayList<>();
         }
 
-        //TODO
-        public Builder disableRejectedLabelText() {
-            this.enableRejectedLabelText = false;
-            return this;
-        }
+        //Nuevo customizable
 
-        //TODO
-        public Builder setBadgeApproved(@Badge.ApprovedBadges Badge approvedBadge) {
-            this.approvedBadge = approvedBadge;
-            return this;
-        }
-
-        //TODO
-        public Builder setApprovedLabelText(String label) {
-            this.approvedLabelText = label;
-            return this;
-        }
-
-        //TODO
         public Builder setApprovedTitle(String title) {
             this.approvedTitle = title;
             return this;
         }
 
-        //TODO
-        public Builder setApprovedHeaderIcon(@DrawableRes Integer headerIcon) {
-            this.approvedIcon = headerIcon;
-            return this;
-        }
-
-        //TODO
-        public Builder setPendingTitle(String title) {
-            this.pendingTitle = title;
-            return this;
-        }
-
-        //TODO
-        public Builder setPendingHeaderIcon(@DrawableRes Integer headerIcon) {
-            this.pendingIcon = headerIcon;
-            return this;
-        }
-
-        //TODO
         public Builder setRejectedTitle(String title) {
             this.rejectedTitle = title;
             return this;
         }
 
-        //TODO
-        public Builder setRejectedHeaderIcon(@DrawableRes Integer headerIcon) {
+        public Builder setPendingTitle(String title) {
+            this.pendingTitle = title;
+            return this;
+        }
+
+        public Builder setApprovedLabelText(String label) {
+            this.approvedLabelText = label;
+            return this;
+        }
+
+        public Builder disableRejectedLabelText() {
+            this.enableRejectedLabelText = false;
+            return this;
+        }
+
+        public Builder setBadgeApproved(@Badge.ApprovedBadges String approvedBadge) {
+            this.approvedBadge = approvedBadge;
+            return this;
+        }
+
+        public Builder setApprovedHeaderIcon(@DrawableRes int headerIcon) {
+            this.approvedIcon = headerIcon;
+            return this;
+        }
+
+        public Builder setPendingHeaderIcon(@DrawableRes int headerIcon) {
+            this.pendingIcon = headerIcon;
+            return this;
+        }
+
+        public Builder setRejectedHeaderIcon(@DrawableRes int headerIcon) {
             this.rejectedIcon = headerIcon;
             return this;
         }
+
+        //hasta acá
 
         @Deprecated
         public Builder setApprovedSubtitle(String subtitle) {
