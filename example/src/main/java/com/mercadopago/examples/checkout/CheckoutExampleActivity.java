@@ -77,7 +77,9 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setApprovedLabelText("Pipipi...")
                 .disableRejectedLabelText()
                 .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
-//                .setApprovedHeaderIcon(R.drawable.prueba)
+//                .setApprovedHeaderIcon(R.drawable.pruebaamarilla)
+//                .setRejectedHeaderIcon(R.drawable.pruebaverde)
+//                .setPendingHeaderIcon(R.drawable.pruebaroja)
                 .build();
 
         new MercadoPagoCheckout.Builder()

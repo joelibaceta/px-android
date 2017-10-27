@@ -1,5 +1,8 @@
 package com.mercadopago.paymentresult;
 
+import android.support.annotation.NonNull;
+
+import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionsListener;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -12,6 +15,7 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.paymentresult.model.AmountFormat;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.util.ApiUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,13 +27,19 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     private Site site;
     private BigDecimal amount;
     private PaymentResultScreenPreference paymentResultScreenPreference;
+    private PaymentResultNavigator navigator;
+    private FailureRecovery failureRecovery;
+
+    public PaymentResultPresenter(@NonNull final PaymentResultNavigator navigator) {
+        this.navigator = navigator;
+    }
 
     public void initialize() {
         try {
             validateParameters();
             onValidStart();
         } catch (IllegalStateException exception) {
-            onInvalidStart(exception.getMessage());
+            navigator.showError(new MercadoPagoError(exception.getMessage(), false), "");
         }
     }
 
@@ -41,7 +51,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         } else if (isPaymentMethodOff()) {
             if (!isPaymentIdValid()) {
                 throw new IllegalStateException("payment id is invalid");
-            } else if(!isSiteValid()) {
+            } else if (!isSiteValid()) {
                 throw new IllegalStateException("site is invalid");
             }
         }
@@ -50,10 +60,6 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     protected void onValidStart() {
         getView().setPropPaymentResult(paymentResult, paymentResultScreenPreference);
         checkGetInstructions();
-    }
-
-    protected void onInvalidStart(String errorDetail) {
-        getView().showError(getResourcesProvider().getStandardErrorMessage(), errorDetail);
     }
 
     private boolean isPaymentResultValid() {
@@ -107,14 +113,14 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         }
     }
 
-    private void getInstructionsAsync(Long paymentId, String paymentTypeId) {
+    private void getInstructionsAsync(final Long paymentId, final String paymentTypeId) {
         getResourcesProvider().getInstructionsAsync(paymentId, paymentTypeId, new OnResourcesRetrievedCallback<Instructions>() {
             @Override
             public void onSuccess(Instructions instructions) {
                 List<Instruction> instructionsList
                         = instructions.getInstructions() == null ? new ArrayList<Instruction>() : instructions.getInstructions();
                 if (instructionsList.isEmpty()) {
-//                    ErrorUtil.startErrorActivity(mActivity, mActivity.getString(R.string.mpsdk_standard_error_message), INSTRUCTIONS_NOT_FOUND_FOR_TYPE + mPaymentTypeId, false, mMerchantPublicKey);
+                    navigator.showError(new MercadoPagoError(getResourcesProvider().getStandardErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
                 } else {
                     resolveInstructions(instructionsList);
                 }
@@ -123,24 +129,33 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
             @Override
             public void onFailure(MercadoPagoError error) {
                 //TODO revisar
-//                if (viewAttached()) {
-//                    getView().showError(error, ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
-//
-//                    setFailureRecovery(new FailureRecovery() {
-//                        @Override
-//                        public void recover() {
-//                            getInstructionsAsync();
-//                        }
-//                    });
-//                }
+                if (navigator != null) {
+                    navigator.showError(error, ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            getInstructionsAsync(paymentId, paymentTypeId);
+                        }
+                    });
+                }
             }
         });
+    }
+
+    public void recoverFromFailure() {
+        if (failureRecovery != null) {
+            failureRecovery.recover();
+        }
+    }
+
+    private void setFailureRecovery(FailureRecovery failureRecovery) {
+        this.failureRecovery = failureRecovery;
     }
 
     private void resolveInstructions(List<Instruction> instructionsList) {
         Instruction instruction = getInstruction(instructionsList);
         if (instruction == null) {
-//            ErrorUtil.startErrorActivity(this, this.getString(R.string.mpsdk_standard_error_message), "instruction not found for type " + mPaymentTypeId, false, mMerchantPublicKey);
+            navigator.showError(new MercadoPagoError(getResourcesProvider().getStandardErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
         } else {
             getView().setPropInstruction(instruction, new AmountFormat(site.getCurrencyId(), amount));
         }

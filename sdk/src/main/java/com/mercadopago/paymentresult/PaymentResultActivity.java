@@ -9,6 +9,8 @@ import com.mercadopago.components.ComponentManager;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
+import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.paymentresult.components.IconComponent;
@@ -23,11 +25,13 @@ import com.mercadopago.paymentresult.renderers.PaymentResultHeaderRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultRenderer;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 
 import java.math.BigDecimal;
 
-public class PaymentResultActivity extends AppCompatActivity {
+public class PaymentResultActivity extends AppCompatActivity implements PaymentResultNavigator {
 
     public static final String PAYER_ACCESS_TOKEN_BUNDLE = "merchantPublicKey";
     public static final String MERCHANT_PUBLIC_KEY_BUNDLE = "payerAccessToken";
@@ -54,7 +58,7 @@ public class PaymentResultActivity extends AppCompatActivity {
 
         final PaymentResultPropsMutator mutator = new PaymentResultPropsMutator();
 
-        presenter = new PaymentResultPresenter();
+        presenter = new PaymentResultPresenter(this);
         getActivityParameters();
 
         PaymentResultProvider provider = new PaymentResultProviderImpl(this, merchantPublicKey, payerAccessToken);
@@ -77,6 +81,31 @@ public class PaymentResultActivity extends AppCompatActivity {
 
         presenter.initialize();
     }
+
+    @Override
+    public void showApiExceptionError(ApiException exception, String requestOrigin) {
+        ApiUtil.showApiExceptionError(this, exception, merchantPublicKey, requestOrigin);
+    }
+
+    @Override
+    public void showError(MercadoPagoError error, String requestOrigin) {
+        if (error != null && error.isApiException()) {
+            showApiExceptionError(error.getApiException(), requestOrigin);
+        } else {
+            ErrorUtil.startErrorActivity(this, error, merchantPublicKey);
+        }
+    }
+
+    //
+//    @Override
+//    public void showError(String errorMessage) {
+//        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, merchantPublicKey);
+//    }
+//
+//    @Override
+//    public void showError(String errorMessage, String errorDetail) {
+//        ErrorUtil.startErrorActivity(this, errorMessage, errorDetail, false, merchantPublicKey);
+//    }
 
 
 //    @Override
@@ -137,16 +166,6 @@ public class PaymentResultActivity extends AppCompatActivity {
 //                .setAmount(amount)
 //                .setPaymentResult(paymentResult)
 //                .startActivity();
-//    }
-//
-//    @Override
-//    public void showError(String errorMessage) {
-//        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, merchantPublicKey);
-//    }
-//
-//    @Override
-//    public void showError(String errorMessage, String errorDetail) {
-//        ErrorUtil.startErrorActivity(this, errorMessage, errorDetail, false, merchantPublicKey);
 //    }
 
     @Override
