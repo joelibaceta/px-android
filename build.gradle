@@ -12,6 +12,7 @@ def coverageClassDirectories = [fileTree(dir: 'sdk/build/intermediates/classes/d
 buildscript {
     repositories {
         jcenter()
+        google()
     }
 
     dependencies {
