@@ -2,13 +2,11 @@ package com.mercadopago.components;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import static android.R.attr.label;
 
 /**
  * Created by vaserber on 10/20/17.
