@@ -31,6 +31,11 @@ public class PaymentResultProviderImpl implements PaymentResultProvider {
         mercadoPago.getInstructions(paymentId, paymentTypeId, new Callback<Instructions>() {
             @Override
             public void success(Instructions instructions) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+
+                }
                 onResourcesRetrievedCallback.onSuccess(instructions);
             }
 

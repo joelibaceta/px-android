@@ -65,10 +65,12 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
 
         this.headerComponent = new PaymentResultHeaderComponent(headerProps, getDispatcher());
 
-        PaymentResultBodyProps bodyProps = new PaymentResultBodyProps(props.paymentResult.getPaymentStatus());
-        this.bodyComponent = new PaymentResultBodyComponent(bodyProps, getDispatcher());
+        if (props.paymentResult != null) {
+            PaymentResultBodyProps bodyProps = new PaymentResultBodyProps(props.paymentResult.getPaymentStatus());
+            this.bodyComponent = new PaymentResultBodyComponent(bodyProps, getDispatcher());
 
-        this.footerComponent = new PaymentResultFooterComponent(props.paymentResult.getPaymentStatus(), getDispatcher());
+            this.footerComponent = new PaymentResultFooterComponent(props.paymentResult.getPaymentStatus(), getDispatcher());
+        }
     }
 
     public boolean hasBody() {
@@ -77,7 +79,9 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
 
     // Background logic
     private int getBackground(PaymentResult paymentResult) {
-        if (isGreenBackground(paymentResult)) {
+        if (paymentResult == null) {
+            return DEFAULT_BACKGROUND_COLOR;
+        } else if (isGreenBackground(paymentResult)) {
             return GREEN_BACKGROUND_COLOR;
         } else if (isRedBackground(paymentResult)) {
             return RED_BACKGROUND_COLOR;
@@ -128,6 +132,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
     private int getIconImage(final PaymentResultProps props) {
         if (props.hasCustomizedIcon()) {
             return props.getPreferenceIcon();
+        } else if (props.paymentResult == null) {
+            return DEFAULT_ICON_IMAGE;
         } else if (isItemIconImage(props.paymentResult)) {
             return ITEM_ICON_IMAGE;
         } else if (isCardIconImage(props.paymentResult)) {
@@ -185,6 +191,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
             } else {
                 return DEFAULT_BADGE_IMAGE;
             }
+        } else if (props.paymentResult == null) {
+            return DEFAULT_BADGE_IMAGE;
         } else if (isCheckBagdeImage(props.paymentResult)) {
             return CHECK_BADGE_IMAGE;
         } else if (isPendingBadgeImage(props.paymentResult)) {
@@ -239,6 +247,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
             return props.getPreferenceTitle();
         } else if (props.hasInstructions()) {
             return props.getInstructionsTitle();
+        } else if (props.paymentResult == null) {
+            return resourcesProvider.getEmptyText();
         } else if (isPaymentMethodOff(props.paymentResult)) {
             return resourcesProvider.getEmptyText();
         } else {
@@ -283,6 +293,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
     private String getLabel(final PaymentResultProps props) {
         if (props.hasCustomizedLabel()) {
             return props.getPreferenceLabel();
+        } else if (props.paymentResult == null) {
+            return resourcesProvider.getEmptyText();
         } else {
             if (isLabelEmpty(props.paymentResult)) {
                 return resourcesProvider.getEmptyText();

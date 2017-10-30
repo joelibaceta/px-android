@@ -79,6 +79,8 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         componentManager.setComponent(root);
         componentManager.setMutator(mutator);
 
+//        mutator.renderDefaultProps();
+
         presenter.initialize();
     }
 

@@ -19,6 +19,7 @@ public class PaymentResultProps {
     public final Instruction instruction;
     public final String headerMode; //"wrap", "stretch"
     public final AmountFormat amountFormat;
+    public final boolean loading;
 
     public PaymentResultProps() {
         this.paymentResult = null;
@@ -26,15 +27,17 @@ public class PaymentResultProps {
         this.instruction = null;
         this.headerMode = "wrap";
         this.amountFormat = null;
+        this.loading = true;
     }
 
     public PaymentResultProps(PaymentResult paymentResult, PaymentResultScreenPreference paymentResultScreenPreference,
-                              Instruction instruction, String headerMode, AmountFormat amountFormat) {
+                              Instruction instruction, String headerMode, AmountFormat amountFormat, boolean loading) {
         this.paymentResult = paymentResult;
         this.paymentResultScreenPreference = paymentResultScreenPreference;
         this.instruction = instruction;
         this.headerMode = headerMode;
         this.amountFormat = amountFormat;
+        this.loading = loading;
     }
 
     public PaymentResultProps(@NonNull final Builder builder) {
@@ -43,6 +46,7 @@ public class PaymentResultProps {
         this.paymentResultScreenPreference = builder.paymentResultScreenPreference;
         this.instruction = builder.instruction;
         this.amountFormat = builder.amountFormat;
+        this.loading = builder.loading;
     }
 
     public Builder toBuilder() {
@@ -51,7 +55,8 @@ public class PaymentResultProps {
                 .setPreference(this.paymentResultScreenPreference)
                 .setHeaderMode(this.headerMode)
                 .setInstruction(this.instruction)
-                .setAmountFormat(this.amountFormat);
+                .setAmountFormat(this.amountFormat)
+                .setLoading(this.loading);
     }
 
     public boolean hasCustomizedTitle() {
@@ -212,6 +217,7 @@ public class PaymentResultProps {
         public Instruction instruction;
         public String headerMode;
         public AmountFormat amountFormat;
+        public boolean loading;
 
         public Builder setPaymentResult(PaymentResult paymentResult) {
             this.paymentResult = paymentResult;
@@ -235,6 +241,11 @@ public class PaymentResultProps {
 
         public Builder setAmountFormat(AmountFormat amountFormat) {
             this.amountFormat = amountFormat;
+            return this;
+        }
+
+        public Builder setLoading(boolean loading) {
+            this.loading = loading;
             return this;
         }
 

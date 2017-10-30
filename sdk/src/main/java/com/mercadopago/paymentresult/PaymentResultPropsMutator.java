@@ -24,15 +24,6 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
         this.propsListener = listener;
     }
 
-    @Override
-    public void showError(String errorMessage) {
-
-    }
-
-    @Override
-    public void showError(String errorMessage, String errorDetail) {
-
-    }
 
     @Override
     public void setPropPaymentResult(final PaymentResult paymentResult, final PaymentResultScreenPreference paymentResultScreenPreference) {
@@ -40,6 +31,7 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
                 .setPaymentResult(paymentResult)
                 .setPreference(paymentResultScreenPreference)
                 .setHeaderMode("wrap")
+                .setLoading(false)
                 .build();
         notifyPropsChanged();
     }
@@ -49,6 +41,7 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
         props = props.toBuilder()
                 .setInstruction(instruction)
                 .setAmountFormat(amountFormat)
+                .setLoading(false)
                 .build();
         notifyPropsChanged();
     }
@@ -57,5 +50,9 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
         if (propsListener != null) {
             propsListener.onProps(props);
         }
+    }
+
+    public void renderDefaultProps() {
+        notifyPropsChanged();
     }
 }
