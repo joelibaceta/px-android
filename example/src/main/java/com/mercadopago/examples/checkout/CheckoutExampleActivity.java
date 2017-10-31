@@ -131,7 +131,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private DecorationPreference getCurrentDecorationPreference() {
-        com.mercadopago.preferences.DecorationPreference.Builder decorationPreferenceBuilder =
+        DecorationPreference.Builder decorationPreferenceBuilder =
                 new DecorationPreference.Builder();
         if (mSelectedColor != null) {
             decorationPreferenceBuilder.setBaseColor(mSelectedColor);

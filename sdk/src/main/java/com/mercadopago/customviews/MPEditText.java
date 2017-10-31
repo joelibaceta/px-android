@@ -6,14 +6,12 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatEditText;
-import android.text.InputType;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import com.mercadopago.R;
 import com.mercadopago.uicontrollers.FontCache;
 
-public class MPEditText extends EditText {
+public class MPEditText extends AppCompatEditText {
 
     private String mTypeName;
     private int mErrorColor;
