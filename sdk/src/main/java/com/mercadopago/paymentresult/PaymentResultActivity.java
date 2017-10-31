@@ -13,18 +13,17 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
+import com.mercadopago.paymentresult.components.HeaderComponent;
 import com.mercadopago.paymentresult.components.IconComponent;
 import com.mercadopago.paymentresult.components.PaymentResultBodyComponent;
 import com.mercadopago.paymentresult.components.PaymentResultContainer;
 import com.mercadopago.paymentresult.components.PaymentResultFooterComponent;
-import com.mercadopago.paymentresult.components.HeaderComponent;
+import com.mercadopago.paymentresult.renderers.HeaderRenderer;
 import com.mercadopago.paymentresult.renderers.IconRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultBodyRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultFooterRenderer;
-import com.mercadopago.paymentresult.renderers.HeaderRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultRenderer;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
@@ -48,7 +47,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     private String payerAccessToken;
     private Integer congratsDisplay;
     private PaymentResultScreenPreference paymentResultScreenPreference;
-    private ServicePreference servicePreference;
 
     private ComponentManager componentManager;
 
@@ -118,7 +116,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         payerAccessToken = savedInstanceState.getString(PAYER_ACCESS_TOKEN_BUNDLE);
 
         congratsDisplay = savedInstanceState.getInt(CONGRATS_DISPLAY_BUNDLE, -1);
-        servicePreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(SERVICE_PREFERENCE_BUNDLE), ServicePreference.class);
 
         paymentResultScreenPreference = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PAYMENT_RESULT_SCREEN_PREFERENCE_BUNDLE), PaymentResultScreenPreference.class);
         super.onRestoreInstanceState(savedInstanceState);
@@ -143,7 +140,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         payerAccessToken = getIntent().getStringExtra("payerAccessToken");
         congratsDisplay = getIntent().getIntExtra("congratsDisplay", -1);
         paymentResultScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
-        servicePreference = JsonUtil.getInstance().fromJson(getIntent().getExtras().getString("servicePreference"), ServicePreference.class);
 
         presenter.setPaymentResultScreenPreference(paymentResultScreenPreference);
     }

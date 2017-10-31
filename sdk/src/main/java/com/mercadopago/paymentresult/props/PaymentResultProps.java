@@ -142,19 +142,15 @@ public class PaymentResultProps {
     }
 
     public boolean hasCustomizedBadge() {
-        if (paymentResultScreenPreference != null) {
-            if (isApprovedBadgeValidState()) {
-                return paymentResultScreenPreference.getApprovedBadge() != null && !paymentResultScreenPreference.getApprovedBadge().isEmpty();
-            }
+        if (paymentResultScreenPreference != null && isApprovedBadgeValidState()) {
+            return paymentResultScreenPreference.getApprovedBadge() != null && !paymentResultScreenPreference.getApprovedBadge().isEmpty();
         }
         return false;
     }
 
     public String getPreferenceBadge() {
-        if (paymentResultScreenPreference != null) {
-            if (isApprovedBadgeValidState()) {
-                return paymentResultScreenPreference.getApprovedBadge();
-            }
+        if (paymentResultScreenPreference != null && isApprovedBadgeValidState()) {
+            return paymentResultScreenPreference.getApprovedBadge();
         }
         return "";
     }

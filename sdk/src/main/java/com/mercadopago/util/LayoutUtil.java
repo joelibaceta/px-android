@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPEditText;

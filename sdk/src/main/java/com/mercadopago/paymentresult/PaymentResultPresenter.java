@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView, PaymentResultProvider> implements ActionsListener {
+    //FIXME: No se usa ?
     private Boolean discountEnabled;
     private PaymentResult paymentResult;
     private Site site;
@@ -38,7 +39,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         try {
             validateParameters();
             onValidStart();
-        } catch (IllegalStateException exception) {
+        } catch (final IllegalStateException exception) {
             navigator.showError(new MercadoPagoError(exception.getMessage(), false), "");
         }
     }
@@ -87,23 +88,23 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         return paymentStatus.equals(Payment.StatusCodes.STATUS_PENDING) && paymentStatusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
     }
 
-    public void setDiscountEnabled(Boolean discountEnabled) {
+    public void setDiscountEnabled(final Boolean discountEnabled) {
         this.discountEnabled = discountEnabled;
     }
 
-    public void setPaymentResult(PaymentResult paymentResult) {
+    public void setPaymentResult(final PaymentResult paymentResult) {
         this.paymentResult = paymentResult;
     }
 
-    public void setSite(Site site) {
+    public void setSite(final Site site) {
         this.site = site;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
 
-    public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
+    public void setPaymentResultScreenPreference(final PaymentResultScreenPreference paymentResultScreenPreference) {
         this.paymentResultScreenPreference = paymentResultScreenPreference;
     }
 
@@ -127,7 +128,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
             }
 
             @Override
-            public void onFailure(MercadoPagoError error) {
+            public void onFailure(final MercadoPagoError error) {
                 //TODO revisar
                 if (navigator != null) {
                     navigator.showError(error, ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
@@ -148,11 +149,11 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         }
     }
 
-    private void setFailureRecovery(FailureRecovery failureRecovery) {
+    private void setFailureRecovery(final FailureRecovery failureRecovery) {
         this.failureRecovery = failureRecovery;
     }
 
-    private void resolveInstructions(List<Instruction> instructionsList) {
+    private void resolveInstructions(final List<Instruction> instructionsList) {
         Instruction instruction = getInstruction(instructionsList);
         if (instruction == null) {
             navigator.showError(new MercadoPagoError(getResourcesProvider().getStandardErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
@@ -161,7 +162,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         }
     }
 
-    private Instruction getInstruction(List<Instruction> instructions) {
+    private Instruction getInstruction(final List<Instruction> instructions) {
         Instruction instruction;
         if (instructions.size() == 1) {
             instruction = instructions.get(0);
@@ -171,7 +172,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         return instruction;
     }
 
-    private Instruction getInstructionForType(List<Instruction> instructions, String paymentTypeId) {
+    private Instruction getInstructionForType(final List<Instruction> instructions, final String paymentTypeId) {
         Instruction instructionForType = null;
         for (Instruction instruction : instructions) {
             if (instruction.getType().equals(paymentTypeId)) {

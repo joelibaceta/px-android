@@ -20,8 +20,6 @@ import com.mercadopago.util.CurrenciesUtil;
 
 public class HeaderRenderer extends Renderer<HeaderComponent> {
 
-    private Renderer iconRenderer;
-
     @Override
     public View render() {
 
@@ -52,7 +50,7 @@ public class HeaderRenderer extends Renderer<HeaderComponent> {
 //    }
 
     private void renderIcon(@NonNull final ViewGroup parent) {
-        iconRenderer = RendererFactory.create(context, component.getIconComponent());
+        final Renderer iconRenderer = RendererFactory.create(context, component.getIconComponent());
         View icon = iconRenderer.render();
         parent.addView(icon);
     }

@@ -2,8 +2,6 @@ package com.mercadopago.paymentresult.model;
 
 import android.support.annotation.StringDef;
 
-import com.mercadopago.R;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
