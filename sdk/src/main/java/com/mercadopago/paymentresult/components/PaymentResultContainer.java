@@ -149,7 +149,6 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
         String status = paymentResult.getPaymentStatus();
         String statusDetail = paymentResult.getPaymentStatusDetail();
         return status.equals(Payment.StatusCodes.STATUS_APPROVED) ||
-                status.equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                 (status.equals(Payment.StatusCodes.STATUS_PENDING) &&
                         statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
     }

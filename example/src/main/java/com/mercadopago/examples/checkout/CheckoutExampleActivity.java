@@ -71,22 +71,25 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private void startMercadoPagoCheckout() {
 
-        /*PaymentResultScreenPreference paymentResultScreenPreference =
+        PaymentResultScreenPreference paymentResultScreenPreference =
                 new PaymentResultScreenPreference.Builder()
-                .setApprovedTitle("Lalala")
-                .setPendingTitle("Lilili")
-                .setRejectedTitle("Lololo")
-                .setApprovedLabelText("Pipipi...")
-                .disableRejectedLabelText()
-                .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
-                .build();*/
+                //.setApprovedTitle("Soy un título de pago aprobado")
+                //.setPendingTitle("Soy un título de pago pendiente")
+                //.setRejectedTitle("Soy un título de pago rechazado")
+                //.setApprovedLabelText("Pipipi...")
+                //.disableRejectedLabelText()
+                //.setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
+                .setPendingHeaderIcon(R.drawable.owl)
+                .setRejectedHeaderIcon(R.drawable.owl)
+                .setApprovedHeaderIcon(R.drawable.owl)
+                .build();
 
         new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setDecorationPreference(getCurrentDecorationPreference())
-                //.setPaymentResultScreenPreference(paymentResultScreenPreference)
+                .setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .startForPayment();
     }
 

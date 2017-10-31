@@ -20,11 +20,13 @@ import com.mercadopago.util.CurrenciesUtil;
 
 public class HeaderRenderer extends Renderer<HeaderComponent> {
 
+    private ViewGroup headerContainer;
+
     @Override
     public View render() {
 
         final View headerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_header, null, false);
-        final ViewGroup headerContainer = (ViewGroup) headerView.findViewById(R.id.mpsdkPaymentResultContainerHeader);
+        headerContainer = (ViewGroup) headerView.findViewById(R.id.mpsdkPaymentResultContainerHeader);
         final TextView titleTextView = (TextView) headerView.findViewById(R.id.mpsdkHeaderTitle);
         final ViewGroup iconParentViewGroup = (ViewGroup) headerView.findViewById(R.id.iconContainer);
         final TextView labelTextView = (TextView) headerView.findViewById(R.id.mpsdkHeaderLabel);
@@ -36,18 +38,18 @@ public class HeaderRenderer extends Renderer<HeaderComponent> {
         renderTitle(titleTextView);
 
         //TODO: Reimplementar el body height en un componente.
-//        renderHeight();
+        renderHeight();
 
         return headerView;
     }
 
-//    private void renderHeight() {
-//        if (component.getProps().height.equals("wrap")) {
-//            wrapHeight(headerContainer);
-//        } else if (component.getProps().height.equals("stretch")) {
-//            stretchHeight(headerContainer);
-//        }
-//    }
+    private void renderHeight() {
+        if (component.getProps().height.equals("wrap")) {
+            wrapHeight(headerContainer);
+        } else if (component.getProps().height.equals("stretch")) {
+            stretchHeight(headerContainer);
+        }
+    }
 
     private void renderIcon(@NonNull final ViewGroup parent) {
         final Renderer iconRenderer = RendererFactory.create(context, component.getIconComponent());
