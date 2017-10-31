@@ -159,7 +159,6 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         } else {
             getView().setPropInstruction(instruction, new AmountFormat(site.getCurrencyId(), amount));
         }
-//        stopLoading();
     }
 
     private Instruction getInstruction(List<Instruction> instructions) {
@@ -187,37 +186,4 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     public void onAction(Action action) {
 
     }
-
-//    private void onValidStart() {
-//        if (paymentResult.getPaymentStatusDetail() != null && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT)) {
-////            getView().showInstructions(site, amount, paymentResult);
-//        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
-//                paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING)) {
-////            getView().showPending(paymentResult);
-//        } else if (isCardOrAccountMoney()) {
-//            startPaymentsOnResult();
-//        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-////            getView().showRejection(paymentResult);
-//        }
-//    }
-
-//    private boolean isCardOrAccountMoney() {
-//        return MercadoPagoUtil.isCard(paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId()) ||
-//                paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
-//    }
-//
-//    private void startPaymentsOnResult() {
-//        if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_APPROVED)) {
-////            getView().showCongrats(site, amount, paymentResult, discountEnabled);
-//        } else if (paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED)) {
-//            if (isStatusDetailValid() && paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
-////                getView().showCallForAuthorize(site, paymentResult);
-//            } else {
-////                getView().showRejection(paymentResult);
-//            }
-//        } else {
-//            getView().showError(getResourcesProvider().getStandardErrorMessage());
-//        }
-//    }
-
 }

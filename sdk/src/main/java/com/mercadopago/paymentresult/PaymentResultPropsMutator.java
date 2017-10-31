@@ -1,5 +1,7 @@
 package com.mercadopago.paymentresult;
 
+import android.support.annotation.NonNull;
+
 import com.mercadopago.components.Mutator;
 import com.mercadopago.components.MutatorPropsListener;
 import com.mercadopago.model.Instruction;
@@ -26,7 +28,8 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
 
 
     @Override
-    public void setPropPaymentResult(final PaymentResult paymentResult, final PaymentResultScreenPreference paymentResultScreenPreference) {
+    public void setPropPaymentResult(@NonNull final PaymentResult paymentResult,
+                                     @NonNull final PaymentResultScreenPreference paymentResultScreenPreference) {
         props = props.toBuilder()
                 .setPaymentResult(paymentResult)
                 .setPreference(paymentResultScreenPreference)
@@ -37,7 +40,8 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
     }
 
     @Override
-    public void setPropInstruction(Instruction instruction, AmountFormat amountFormat) {
+    public void setPropInstruction(@NonNull final Instruction instruction,
+                                   @NonNull final AmountFormat amountFormat) {
         props = props.toBuilder()
                 .setInstruction(instruction)
                 .setAmountFormat(amountFormat)
