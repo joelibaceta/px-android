@@ -66,7 +66,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
         this.headerComponent = new HeaderComponent(headerProps, getDispatcher());
 
         if (props.paymentResult != null) {
-            PaymentResultBodyProps bodyProps = new PaymentResultBodyProps(props.paymentResult.getPaymentStatus());
+            PaymentResultBodyProps bodyProps = new PaymentResultBodyProps(props.paymentResult.getPaymentStatus(),
+                    props.paymentResult.getPaymentStatusDetail());
             this.bodyComponent = new PaymentResultBodyComponent(bodyProps, getDispatcher());
 
             this.footerComponent = new PaymentResultFooterComponent(props.paymentResult.getPaymentStatus(), getDispatcher());
@@ -149,7 +150,6 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
         String status = paymentResult.getPaymentStatus();
         String statusDetail = paymentResult.getPaymentStatusDetail();
         return status.equals(Payment.StatusCodes.STATUS_APPROVED) ||
-                status.equals(Payment.StatusCodes.STATUS_IN_PROCESS) ||
                 (status.equals(Payment.StatusCodes.STATUS_PENDING) &&
                         statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT));
     }
@@ -281,6 +281,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
                 } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK)
                         || statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA)) {
                     return resourcesProvider.getRejectedInsufficientDataTitle();
+                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+                    return resourcesProvider.getRejectedCallForAuthorizeTitle();
                 } else {
                     return resourcesProvider.getRejectedBadFilledOther();
                 }

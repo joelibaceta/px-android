@@ -27,14 +27,17 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
     }
 
 
+    //amountFormat can be null
     @Override
     public void setPropPaymentResult(@NonNull final PaymentResult paymentResult,
-                                     @NonNull final PaymentResultScreenPreference paymentResultScreenPreference) {
+                                     @NonNull final PaymentResultScreenPreference paymentResultScreenPreference,
+                                     final AmountFormat amountFormat) {
         props = props.toBuilder()
                 .setPaymentResult(paymentResult)
                 .setPreference(paymentResultScreenPreference)
                 .setHeaderMode("wrap")
                 .setLoading(false)
+                .setAmountFormat(amountFormat)
                 .build();
         notifyPropsChanged();
     }

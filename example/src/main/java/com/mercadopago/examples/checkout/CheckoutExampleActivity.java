@@ -73,22 +73,11 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private void startMercadoPagoCheckout() {
 
-        PaymentResultScreenPreference paymentResultScreenPreference =
-                new PaymentResultScreenPreference.Builder()
-                .setApprovedTitle("Approved title")
-                .setPendingTitle("Pending title")
-                .setRejectedTitle("Rejected title")
-                .setApprovedLabelText("Approved label")
-                .disableRejectedLabelText()
-                .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
-                .build();
-
         new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setDecorationPreference(getCurrentDecorationPreference())
-                .setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .startForPayment();
     }
 

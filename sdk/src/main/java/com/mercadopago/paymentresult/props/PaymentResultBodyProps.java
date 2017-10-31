@@ -9,26 +9,36 @@ import android.support.annotation.NonNull;
 public class PaymentResultBodyProps {
 
     public final String status;
+    public final String statusDetail;
 
-    public PaymentResultBodyProps(String status) {
+    public PaymentResultBodyProps(String status, String statusDetail) {
         this.status = status;
+        this.statusDetail = statusDetail;
     }
 
     public PaymentResultBodyProps(@NonNull final Builder builder) {
         this.status = builder.status;
+        this.statusDetail = builder.statusDetail;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setStatus(this.status);
+                .setStatus(this.status)
+                .setStatusDetail(this.statusDetail);
     }
 
     public class Builder {
 
         public String status;
+        public String statusDetail;
 
         public Builder setStatus(String status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder setStatusDetail(String statusDetail) {
+            this.statusDetail = statusDetail;
             return this;
         }
 

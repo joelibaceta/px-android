@@ -10,10 +10,17 @@ public class AmountFormat {
 
     private String currencyId;
     private BigDecimal amount;
+    private String paymentMethodName;
 
     public AmountFormat(String currencyId, BigDecimal amount) {
         this.currencyId = currencyId;
         this.amount = amount;
+    }
+
+    public AmountFormat(String currencyId, BigDecimal amount, String paymentMethodName) {
+        this.currencyId = currencyId;
+        this.amount = amount;
+        this.paymentMethodName = paymentMethodName;
     }
 
     public String getCurrencyId() {
@@ -22,5 +29,9 @@ public class AmountFormat {
 
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    public String getPaymentMethodName() {
+        return paymentMethodName;
     }
 }

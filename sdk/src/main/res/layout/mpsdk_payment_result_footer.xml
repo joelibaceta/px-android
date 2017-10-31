@@ -4,7 +4,7 @@
     android:id="@+id/mpsdkPaymentResultContainerFooter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/mpsdk_argencard"
+    android:background="@color/mpsdk_blue_MP"
     android:padding="10dp">
 
     <LinearLayout
