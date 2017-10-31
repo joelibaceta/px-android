@@ -71,7 +71,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
 
     private void startMercadoPagoCheckout() {
 
-        PaymentResultScreenPreference paymentResultScreenPreference =
+        /*PaymentResultScreenPreference paymentResultScreenPreference =
                 new PaymentResultScreenPreference.Builder()
                 .setApprovedTitle("Lalala")
                 .setPendingTitle("Lilili")
@@ -79,14 +79,14 @@ public class CheckoutExampleActivity extends AppCompatActivity {
                 .setApprovedLabelText("Pipipi...")
                 .disableRejectedLabelText()
                 .setBadgeApproved(Badge.PENDING_BADGE_IMAGE)
-                .build();
+                .build();*/
 
         new MercadoPagoCheckout.Builder()
                 .setActivity(this)
                 .setPublicKey(mPublicKey)
                 .setCheckoutPreference(getCheckoutPreference())
                 .setDecorationPreference(getCurrentDecorationPreference())
-                .setPaymentResultScreenPreference(paymentResultScreenPreference)
+                //.setPaymentResultScreenPreference(paymentResultScreenPreference)
                 .startForPayment();
     }
 
