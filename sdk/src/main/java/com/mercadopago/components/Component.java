@@ -29,7 +29,7 @@ public abstract class Component<T> {
         return dispatcher;
     }
 
-    public void setProps(T props) {
+    public void setProps(@NonNull final T props) {
         this.props = props;
     }
 

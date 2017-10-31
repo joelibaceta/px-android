@@ -14,15 +14,15 @@ public interface PaymentResultProvider extends ResourcesProvider {
 
     String getPendingTitle();
 
-    String getRejectedOtherReasonTitle(String paymentMethodName);
+    String getRejectedOtherReasonTitle(final String paymentMethodName);
 
-    String getRejectedInsufficientAmountTitle(String paymentMethodName);
+    String getRejectedInsufficientAmountTitle(final String paymentMethodName);
 
-    String getRejectedDuplicatedPaymentTitle(String paymentMethodName);
+    String getRejectedDuplicatedPaymentTitle(final String paymentMethodName);
 
-    String getRejectedCardDisabledTitle(String paymentMethodName);
+    String getRejectedCardDisabledTitle(final String paymentMethodName);
 
-    String getRejectedBadFilledCardTitle(String paymentMethodName);
+    String getRejectedBadFilledCardTitle(final String paymentMethodName);
 
     String getRejectedHighRiskTitle();
 

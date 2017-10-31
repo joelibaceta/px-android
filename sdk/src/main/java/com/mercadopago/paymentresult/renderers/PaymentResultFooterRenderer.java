@@ -14,15 +14,11 @@ import com.mercadopago.paymentresult.components.PaymentResultFooterComponent;
 
 public class PaymentResultFooterRenderer extends Renderer<PaymentResultFooterComponent> {
 
-    private View footerView;
-    private TextView textView;
-
     @Override
     public View render() {
-        footerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_footer, null, false);
-        textView = (TextView) footerView.findViewById(R.id.footerText);
+        final View footerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_footer, null);
+        final TextView textView = (TextView) footerView.findViewById(R.id.footerText);
         textView.setText(component.getProps());
         return footerView;
     }
-
 }

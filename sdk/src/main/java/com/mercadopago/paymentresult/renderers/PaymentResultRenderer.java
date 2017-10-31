@@ -15,11 +15,6 @@ import com.mercadopago.paymentresult.components.PaymentResultContainer;
 
 public class PaymentResultRenderer extends Renderer<PaymentResultContainer> {
 
-    private Renderer headerRenderer;
-    private Renderer bodyRenderer;
-    private Renderer footerRenderer;
-    private ViewGroup parentViewGroup;
-
     @Override
     public View render() {
         View containerView;
@@ -27,32 +22,20 @@ public class PaymentResultRenderer extends Renderer<PaymentResultContainer> {
             containerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_loading_spinner, null, false);
         } else {
             containerView = LayoutInflater.from(context).inflate(R.layout.mpsdk_payment_result_container, null, false);
-            parentViewGroup = (ViewGroup) containerView.findViewById(R.id.mpsdkPaymentResultContainer);
+            final ViewGroup parentViewGroup = (ViewGroup) containerView.findViewById(R.id.mpsdkPaymentResultContainer);
 
-            headerRenderer = RendererFactory.create(context, component.headerComponent);
-            View header = renderHeader();
-            this.parentViewGroup.addView(header);
+            final Renderer headerRenderer = RendererFactory.create(context, component.headerComponent);
+            final View header = headerRenderer.render();
+            parentViewGroup.addView(header);
 
-            bodyRenderer = RendererFactory.create(context, component.bodyComponent);
-            View body = renderBody();
-            this.parentViewGroup.addView(body);
+            final Renderer bodyRenderer = RendererFactory.create(context, component.bodyComponent);
+            final View body = bodyRenderer.render();
+            parentViewGroup.addView(body);
 
-            footerRenderer = RendererFactory.create(context, component.footerComponent);
-            View footer = renderFooter();
-            this.parentViewGroup.addView(footer);
+            final Renderer footerRenderer = RendererFactory.create(context, component.footerComponent);
+            final View footer = footerRenderer.render();
+            parentViewGroup.addView(footer);
         }
         return containerView;
-    }
-
-    private View renderHeader() {
-        return headerRenderer.render();
-    }
-
-    private View renderBody() {
-        return bodyRenderer.render();
-    }
-
-    private View renderFooter() {
-        return footerRenderer.render();
     }
 }

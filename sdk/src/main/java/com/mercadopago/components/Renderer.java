@@ -2,6 +2,7 @@ package com.mercadopago.components;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -17,17 +18,19 @@ public abstract class Renderer<T extends Component> {
     protected T component;
     protected Context context;
 
-    public void setComponent(T component) {
+    public void setComponent(@NonNull final T component) {
         this.component = component;
     }
 
-    public void setContext(Context context) {
+    public void setContext(@NonNull final Context context) {
         this.context = context;
     }
 
     public abstract View render();
 
-    public void wrapHeight(ViewGroup viewGroup) {
+    //TODO: move to component
+    @Deprecated
+    public void wrapHeight(@NonNull final ViewGroup viewGroup) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -35,7 +38,9 @@ public abstract class Renderer<T extends Component> {
         viewGroup.setLayoutParams(params);
     }
 
-    public void stretchHeight(ViewGroup viewGroup) {
+    //TODO: move to component
+    @Deprecated
+    public void stretchHeight(@NonNull final ViewGroup viewGroup) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 0,
@@ -44,7 +49,9 @@ public abstract class Renderer<T extends Component> {
         viewGroup.setLayoutParams(params);
     }
 
-    protected void setText(final TextView view, final int id) {
+    //TODO: move to Text component
+    @Deprecated
+    protected void setText(@NonNull final TextView view, final int id) {
         try {
             String text = context.getResources().getString(id);
             if (text.isEmpty()) {
@@ -58,7 +65,9 @@ public abstract class Renderer<T extends Component> {
         }
     }
 
-    protected void setText(final TextView view, String text) {
+    //TODO: move to Text component
+    @Deprecated
+    protected void setText(@NonNull final TextView view, String text) {
         if (text.isEmpty()) {
             view.setVisibility(View.GONE);
         } else {

@@ -5,22 +5,23 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.paymentresult.props.IconProps;
-import com.mercadopago.paymentresult.props.PaymentResultHeaderProps;
+import com.mercadopago.paymentresult.props.HeaderProps;
 
 /**
  * Created by vaserber on 10/20/17.
  */
 
-public class PaymentResultHeaderComponent extends Component<PaymentResultHeaderProps> {
+public class HeaderComponent extends Component<HeaderProps> {
 
     private IconComponent iconComponent;
 
-    public PaymentResultHeaderComponent(PaymentResultHeaderProps props, @NonNull final ActionDispatcher dispatcher) {
+    public HeaderComponent(@NonNull final HeaderProps props,
+                           @NonNull final ActionDispatcher dispatcher) {
         super(props, dispatcher);
     }
 
     @Override
-    public void applyProps(@NonNull PaymentResultHeaderProps props) {
+    public void applyProps(@NonNull final HeaderProps props) {
         IconProps iconProps = new IconProps.Builder()
                 .setIconImage(props.iconImage)
                 .setBadgeImage(props.badgeImage)
@@ -31,6 +32,4 @@ public class PaymentResultHeaderComponent extends Component<PaymentResultHeaderP
     public IconComponent getIconComponent() {
         return iconComponent;
     }
-
-
 }

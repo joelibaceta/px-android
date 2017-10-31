@@ -11,7 +11,7 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
-import com.mercadopago.paymentresult.props.PaymentResultHeaderProps;
+import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 
@@ -38,7 +38,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
     private static final int ERROR_BADGE_IMAGE = R.drawable.mpsdk_badge_error;
     private static final int WARNING_BADGE_IMAGE = R.drawable.mpsdk_badge_warning;
 
-    public PaymentResultHeaderComponent headerComponent;
+    public HeaderComponent headerComponent;
     public PaymentResultBodyComponent bodyComponent;
     public PaymentResultFooterComponent footerComponent;
 
@@ -52,7 +52,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
     @Override
     public void applyProps(@NonNull PaymentResultProps props) {
 
-        PaymentResultHeaderProps headerProps = new PaymentResultHeaderProps.Builder()
+        HeaderProps headerProps = new HeaderProps.Builder()
                 .setHeight(props.headerMode)
                 .setBackground(getBackground(props.paymentResult))
                 .setIconImage(getIconImage(props))
@@ -63,7 +63,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
                 .build();
 
 
-        this.headerComponent = new PaymentResultHeaderComponent(headerProps, getDispatcher());
+        this.headerComponent = new HeaderComponent(headerProps, getDispatcher());
 
         if (props.paymentResult != null) {
             PaymentResultBodyProps bodyProps = new PaymentResultBodyProps(props.paymentResult.getPaymentStatus());

@@ -17,11 +17,11 @@ import com.mercadopago.paymentresult.components.IconComponent;
 import com.mercadopago.paymentresult.components.PaymentResultBodyComponent;
 import com.mercadopago.paymentresult.components.PaymentResultContainer;
 import com.mercadopago.paymentresult.components.PaymentResultFooterComponent;
-import com.mercadopago.paymentresult.components.PaymentResultHeaderComponent;
+import com.mercadopago.paymentresult.components.HeaderComponent;
 import com.mercadopago.paymentresult.renderers.IconRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultBodyRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultFooterRenderer;
-import com.mercadopago.paymentresult.renderers.PaymentResultHeaderRenderer;
+import com.mercadopago.paymentresult.renderers.HeaderRenderer;
 import com.mercadopago.paymentresult.renderers.PaymentResultRenderer;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
@@ -53,7 +53,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     private ComponentManager componentManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final PaymentResultPropsMutator mutator = new PaymentResultPropsMutator();
@@ -69,7 +69,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         componentManager = new ComponentManager(this);
 
         RendererFactory.register(PaymentResultContainer.class, PaymentResultRenderer.class);
-        RendererFactory.register(PaymentResultHeaderComponent.class, PaymentResultHeaderRenderer.class);
+        RendererFactory.register(HeaderComponent.class, HeaderRenderer.class);
         RendererFactory.register(PaymentResultBodyComponent.class, PaymentResultBodyRenderer.class);
         RendererFactory.register(PaymentResultFooterComponent.class, PaymentResultFooterRenderer.class);
         RendererFactory.register(IconComponent.class, IconRenderer.class);
@@ -85,12 +85,12 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     }
 
     @Override
-    public void showApiExceptionError(ApiException exception, String requestOrigin) {
+    public void showApiExceptionError(final ApiException exception, final String requestOrigin) {
         ApiUtil.showApiExceptionError(this, exception, merchantPublicKey, requestOrigin);
     }
 
     @Override
-    public void showError(MercadoPagoError error, String requestOrigin) {
+    public void showError(final MercadoPagoError error, final String requestOrigin) {
         if (error != null && error.isApiException()) {
             showApiExceptionError(error.getApiException(), requestOrigin);
         } else {
@@ -98,80 +98,8 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         }
     }
 
-    //
-//    @Override
-//    public void showError(String errorMessage) {
-//        ErrorUtil.startErrorActivity(this, getString(R.string.mpsdk_standard_error_message), false, merchantPublicKey);
-//    }
-//
-//    @Override
-//    public void showError(String errorMessage, String errorDetail) {
-//        ErrorUtil.startErrorActivity(this, errorMessage, errorDetail, false, merchantPublicKey);
-//    }
-
-
-//    @Override
-//    public void showCongrats(Site site, BigDecimal amount, PaymentResult paymentResult, Boolean discountEnabled) {
-//        new MercadoPagoComponents.Activities.CongratsActivityBuilder()
-//                .setMerchantPublicKey(merchantPublicKey)
-//                .setActivity(this)
-//                .setCongratsDisplay(congratsDisplay)
-//                .setServicePreference(servicePreference)
-//                .setPaymentResultScreenPreference(paymentResultScreenPreference)
-//                .setSite(site)
-//                .setAmount(amount)
-//                .setDiscountEnabled(discountEnabled)
-//                .setPaymentResult(paymentResult)
-//                .startActivity();
-//    }
-//
-//    @Override
-//    public void showCallForAuthorize(Site site, PaymentResult paymentResult) {
-//        new MercadoPagoComponents.Activities.CallForAuthorizeActivityBuilder()
-//                .setMerchantPublicKey(merchantPublicKey)
-//                .setActivity(this)
-//                .setPaymentResultScreenPreference(paymentResultScreenPreference)
-//                .setPaymentResult(paymentResult)
-//                .setSite(site)
-//                .startActivity();
-//    }
-//
-//    @Override
-//    public void showRejection(PaymentResult paymentResult) {
-//        new MercadoPagoComponents.Activities.RejectionActivityBuilder()
-//                .setMerchantPublicKey(merchantPublicKey)
-//                .setActivity(this)
-//                .setPaymentResultScreenPreference(paymentResultScreenPreference)
-//                .setPaymentResult(paymentResult)
-//                .startActivity();
-//    }
-//
-//    @Override
-//    public void showPending(PaymentResult paymentResult) {
-//        new MercadoPagoComponents.Activities.PendingActivityBuilder()
-//                .setMerchantPublicKey(merchantPublicKey)
-//                .setActivity(this)
-//                .setPaymentResultScreenPreference(paymentResultScreenPreference)
-//                .setPaymentResult(paymentResult)
-//                .startActivity();
-//    }
-//
-//    @Override
-//    public void showInstructions(Site site, BigDecimal amount, PaymentResult paymentResult) {
-//        new MercadoPagoComponents.Activities.InstructionsActivityBuilder()
-//                .setMerchantPublicKey(merchantPublicKey)
-//                .setPayerAccessToken(payerAccessToken)
-//                .setActivity(this)
-//                .setServicePreference(servicePreference)
-//                .setPaymentResultScreenPreference(paymentResultScreenPreference)
-//                .setSite(site)
-//                .setAmount(amount)
-//                .setPaymentResult(paymentResult)
-//                .startActivity();
-//    }
-
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(PRESENTER_BUNDLE, JsonUtil.getInstance().toJson(presenter));
 
@@ -183,7 +111,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         presenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), PaymentResultPresenter.class);
 
         merchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
@@ -221,7 +149,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
 
         if (resultCode == MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE) {
             resolveTimerObserverResult(resultCode);
@@ -240,12 +168,12 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         }
     }
 
-    private void resolveTimerObserverResult(int resultCode) {
+    private void resolveTimerObserverResult(final int resultCode) {
         setResult(resultCode);
         finish();
     }
 
-    private void resolveRequest(int resultCode, Intent data) {
+    private void resolveRequest(final int resultCode, final Intent data) {
         if (resultCode == RESULT_CANCELED && data != null) {
             finishWithCancelResult(data);
         } else {
@@ -253,12 +181,12 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         }
     }
 
-    private void finishWithCancelResult(Intent data) {
+    private void finishWithCancelResult(final Intent data) {
         setResult(RESULT_CANCELED, data);
         finish();
     }
 
-    private void finishWithOkResult(int resultCode, Intent data) {
+    private void finishWithOkResult(final int resultCode, final Intent data) {
         setResult(resultCode, data);
         finish();
     }

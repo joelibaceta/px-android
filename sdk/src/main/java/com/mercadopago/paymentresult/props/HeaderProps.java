@@ -1,7 +1,7 @@
 package com.mercadopago.paymentresult.props;
 
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 
 import com.mercadopago.paymentresult.model.AmountFormat;
 
@@ -10,7 +10,7 @@ import com.mercadopago.paymentresult.model.AmountFormat;
  * Created by vaserber on 10/20/17.
  */
 
-public class PaymentResultHeaderProps {
+public class HeaderProps {
 
     public final String height;
     public final int background;
@@ -20,8 +20,13 @@ public class PaymentResultHeaderProps {
     public final String label;
     public final AmountFormat amountFormat;
 
-    public PaymentResultHeaderProps(String height, int background, int iconImage,
-                                    int badgeImage, String title, String label, AmountFormat formatter) {
+    public HeaderProps(final String height,
+                       @DrawableRes final int background,
+                       @DrawableRes final int iconImage,
+                       @DrawableRes final int badgeImage,
+                       final String title,
+                       final String label,
+                       final AmountFormat formatter) {
         this.height = height;
         this.background = background;
         this.iconImage = iconImage;
@@ -31,7 +36,7 @@ public class PaymentResultHeaderProps {
         this.amountFormat = formatter;
     }
 
-    public PaymentResultHeaderProps(@NonNull final Builder builder) {
+    public HeaderProps(@NonNull final Builder builder) {
         this.height = builder.height;
         this.background = builder.background;
         this.iconImage = builder.iconImage;
@@ -64,22 +69,22 @@ public class PaymentResultHeaderProps {
         public String label;
         public AmountFormat amountFormat;
 
-        public Builder setBackground(int background) {
+        public Builder setBackground(@DrawableRes final int background) {
             this.background = background;
             return this;
         }
 
-        public Builder setIconImage(int iconImage) {
+        public Builder setIconImage(@DrawableRes final int iconImage) {
             this.iconImage = iconImage;
             return this;
         }
 
-        public Builder setBadgeImage(int badgeImage) {
+        public Builder setBadgeImage(@DrawableRes final int badgeImage) {
             this.badgeImage = badgeImage;
             return this;
         }
 
-        public Builder setHeight(String height) {
+        public Builder setHeight(@NonNull final String height) {
             this.height = height;
             return this;
         }
@@ -94,13 +99,13 @@ public class PaymentResultHeaderProps {
             return this;
         }
 
-        public Builder setAmountFormat(AmountFormat amountFormat) {
+        public Builder setAmountFormat(@NonNull final AmountFormat amountFormat) {
             this.amountFormat = amountFormat;
             return this;
         }
 
-        public PaymentResultHeaderProps build() {
-            return new PaymentResultHeaderProps(this);
+        public HeaderProps build() {
+            return new HeaderProps(this);
         }
     }
 }

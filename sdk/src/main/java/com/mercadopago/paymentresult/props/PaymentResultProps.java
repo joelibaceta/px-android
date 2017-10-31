@@ -17,7 +17,7 @@ public class PaymentResultProps {
     public final PaymentResult paymentResult;
     public final PaymentResultScreenPreference paymentResultScreenPreference;
     public final Instruction instruction;
-    public final String headerMode; //"wrap", "stretch"
+    public final String headerMode;
     public final AmountFormat amountFormat;
     public final boolean loading;
 
@@ -30,8 +30,12 @@ public class PaymentResultProps {
         this.loading = true;
     }
 
-    public PaymentResultProps(PaymentResult paymentResult, PaymentResultScreenPreference paymentResultScreenPreference,
-                              Instruction instruction, String headerMode, AmountFormat amountFormat, boolean loading) {
+    public PaymentResultProps(final PaymentResult paymentResult,
+                              final PaymentResultScreenPreference paymentResultScreenPreference,
+                              final Instruction instruction,
+                              final String headerMode,
+                              final AmountFormat amountFormat,
+                              final boolean loading) {
         this.paymentResult = paymentResult;
         this.paymentResultScreenPreference = paymentResultScreenPreference;
         this.instruction = instruction;
@@ -219,32 +223,32 @@ public class PaymentResultProps {
         public AmountFormat amountFormat;
         public boolean loading;
 
-        public Builder setPaymentResult(PaymentResult paymentResult) {
+        public Builder setPaymentResult(@NonNull final PaymentResult paymentResult) {
             this.paymentResult = paymentResult;
             return this;
         }
 
-        public Builder setHeaderMode(String headerMode) {
+        public Builder setHeaderMode(@NonNull final String headerMode) {
             this.headerMode = headerMode;
             return this;
         }
 
-        public Builder setPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
+        public Builder setPreference(@NonNull final PaymentResultScreenPreference paymentResultScreenPreference) {
             this.paymentResultScreenPreference = paymentResultScreenPreference;
             return this;
         }
 
-        public Builder setInstruction(Instruction instruction) {
+        public Builder setInstruction(@NonNull final Instruction instruction) {
             this.instruction = instruction;
             return this;
         }
 
-        public Builder setAmountFormat(AmountFormat amountFormat) {
+        public Builder setAmountFormat(@NonNull final AmountFormat amountFormat) {
             this.amountFormat = amountFormat;
             return this;
         }
 
-        public Builder setLoading(boolean loading) {
+        public Builder setLoading(final boolean loading) {
             this.loading = loading;
             return this;
         }

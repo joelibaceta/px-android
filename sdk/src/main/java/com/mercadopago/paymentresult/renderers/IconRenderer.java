@@ -1,6 +1,7 @@
 package com.mercadopago.paymentresult.renderers;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,42 +20,34 @@ import com.squareup.picasso.Picasso;
 
 public class IconRenderer extends Renderer<IconComponent> {
 
-    private View iconView;
-    private ImageView iconImageView;
-    private ImageView iconBadgeView;
-
     @Override
     public View render() {
-        iconView = LayoutInflater.from(context).inflate(R.layout.mpsdk_icon, null, false);
-        iconImageView = (ImageView) iconView.findViewById(R.id.mpsdkIconProduct);
-        iconBadgeView = (ImageView) iconView.findViewById(R.id.mpsdkIconBadge);
-
-        renderIcon();
-        renderBadge();
+        final View iconView = LayoutInflater.from(context).inflate(R.layout.mpsdk_icon, null);
+        final ImageView iconImageView = (ImageView) iconView.findViewById(R.id.mpsdkIconProduct);
+        final ImageView iconBadgeView = (ImageView) iconView.findViewById(R.id.mpsdkIconBadge);
+        renderIcon(iconImageView);
+        renderBadge(iconBadgeView);
         return iconView;
     }
 
-    private void renderIcon() {
-//        Drawable iconImage = ContextCompat.getDrawable(context, component.getProps().iconImage);
-//        iconImageView.setImageDrawable(iconImage);
-
-        int dimen = ScaleUtil.getPxFromDp(90, context);
+    private void renderIcon(@NonNull final ImageView imageView) {
+        final int dimen = ScaleUtil.getPxFromDp(90, context);
         Picasso.with(context)
                 .load(component.getProps().iconImage)
                 .transform(new CircleTransform())
                 .resize(dimen, dimen)
                 .centerInside()
-//                .placeholder(R.drawable.mpsdk_icon_default)
-                .into(iconImageView);
+                .into(imageView);
     }
 
-    private void renderBadge() {
+    private void renderBadge(@NonNull final ImageView imageView) {
         if (component.getProps().badgeImage == 0) {
-            iconBadgeView.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
         } else {
-            Drawable badgeImage = ContextCompat.getDrawable(context, component.getProps().badgeImage);
-            iconBadgeView.setImageDrawable(badgeImage);
-            iconBadgeView.setVisibility(View.VISIBLE);
+            final Drawable badgeImage = ContextCompat.getDrawable(context,
+                    component.getProps().badgeImage);
+            imageView.setImageDrawable(badgeImage);
+            imageView.setVisibility(View.VISIBLE);
         }
     }
 
