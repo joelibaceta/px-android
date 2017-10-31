@@ -97,6 +97,11 @@ public class PaymentResultProviderImpl implements PaymentResultProvider {
     }
 
     @Override
+    public String getRejectedCallForAuthorizeTitle() {
+        return context.getString(R.string.mpsdk_title_activity_call_for_authorize);
+    }
+
+    @Override
     public String getRejectedBadFilledOther() {
         return context.getString(R.string.mpsdk_title_bad_filled_other);
     }

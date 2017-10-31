@@ -281,6 +281,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps> {
                 } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK)
                         || statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA)) {
                     return resourcesProvider.getRejectedInsufficientDataTitle();
+                } else if (statusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
+                    return resourcesProvider.getRejectedCallForAuthorizeTitle();
                 } else {
                     return resourcesProvider.getRejectedBadFilledOther();
                 }

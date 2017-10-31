@@ -59,11 +59,22 @@ public class HeaderRenderer extends Renderer<HeaderComponent> {
         if (component.getProps().amountFormat == null) {
             setText(titleTextView, component.getProps().title);
         } else {
-            Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>",
-                    component.getProps().amountFormat.getAmount(),
-                    component.getProps().amountFormat.getCurrencyId(),
-                    component.getProps().title, false, true);
-            titleTextView.setText(formattedTitle);
+            if (component.getProps().amountFormat.getPaymentMethodName() == null) {
+                Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText("<br>",
+                        component.getProps().amountFormat.getAmount(),
+                        component.getProps().amountFormat.getCurrencyId(),
+                        component.getProps().title, false, true);
+                titleTextView.setText(formattedTitle);
+            } else {
+                String amount = CurrenciesUtil.formatNumber(component.getProps().amountFormat.getAmount(),
+                        component.getProps().amountFormat.getCurrencyId());
+                String title = String.format(component.getProps().title,
+                        "<br>" + component.getProps().amountFormat.getPaymentMethodName(),
+                        "<br>" + amount);
+                Spanned formattedTitle = CurrenciesUtil.formatCurrencyInText(component.getProps().amountFormat.getAmount(),
+                        component.getProps().amountFormat.getCurrencyId(), title, true, true);
+                titleTextView.setText(formattedTitle);
+            }
         }
     }
 }

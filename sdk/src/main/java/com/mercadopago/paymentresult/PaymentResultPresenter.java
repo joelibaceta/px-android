@@ -59,7 +59,11 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     }
 
     protected void onValidStart() {
-        getView().setPropPaymentResult(paymentResult, paymentResultScreenPreference);
+        AmountFormat amountFormat = null;
+        if (isCallForAuthorize()) {
+            amountFormat = new AmountFormat(site.getCurrencyId(), amount, paymentResult.getPaymentData().getPaymentMethod().getName());
+        }
+        getView().setPropPaymentResult(paymentResult, paymentResultScreenPreference, amountFormat);
         checkGetInstructions();
     }
 
@@ -86,6 +90,11 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         String paymentStatus = paymentResult.getPaymentStatus();
         String paymentStatusDetail = paymentResult.getPaymentStatusDetail();
         return paymentStatus.equals(Payment.StatusCodes.STATUS_PENDING) && paymentStatusDetail.equals(Payment.StatusCodes.STATUS_DETAIL_PENDING_WAITING_PAYMENT);
+    }
+
+    private boolean isCallForAuthorize() {
+        return paymentResult.getPaymentStatus().equals(Payment.StatusCodes.STATUS_REJECTED) &&
+                paymentResult.getPaymentStatusDetail().equals(Payment.StatusCodes.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE);
     }
 
     public void setDiscountEnabled(final Boolean discountEnabled) {
