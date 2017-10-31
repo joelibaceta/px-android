@@ -7,10 +7,10 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="50dp"
-    android:paddingEnd="24dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingStart="24dp"
+    android:paddingEnd="25dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    android:paddingStart="25dp"
     tools:background="@color/mpsdk_green_MP">
 
     <FrameLayout
@@ -37,6 +37,6 @@
         android:gravity="center_horizontal"
         android:textColor="@color/mpsdk_white"
         android:textSize="26sp"
-        tools:text="¡Listo, se acreditó tu pago!" />
+        tools:text="Algun dato de tu mastercard es incorrecto" />
 
 </LinearLayout>
