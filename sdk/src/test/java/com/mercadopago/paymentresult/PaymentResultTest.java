@@ -175,6 +175,36 @@ public class PaymentResultTest {
     }
 
     @Test
+    public void whenPaymentOffRejectedThenShowRejection() {
+
+        MockedNavigator navigator = new MockedNavigator();
+        PaymentResultPresenter presenter = new PaymentResultPresenter(navigator);
+
+        PaymentData paymentData = new PaymentData();
+        paymentData.setPaymentMethod(PaymentMethods.getPaymentMethodOff());
+
+        PaymentResult paymentResult = new PaymentResult.Builder()
+                .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
+                .setPaymentData(paymentData)
+                .build();
+
+        presenter.setPaymentResult(paymentResult);
+        presenter.setAmount(new BigDecimal("100"));
+        presenter.setSite(Sites.ARGENTINA);
+        presenter.setDiscountEnabled(Boolean.TRUE);
+
+        MockedPropsView mockedView = new MockedPropsView();
+        MockedProvider mockedProvider = new MockedProvider();
+
+        presenter.attachView(mockedView);
+        presenter.attachResourcesProvider(mockedProvider);
+
+        presenter.initialize();
+        //TODO fix
+//        Assert.assertTrue(mockedView.rejectionShown);
+    }
+
+    @Test
     public void whenUnknownStatusThenShowError() {
         MockedNavigator navigator = new MockedNavigator();
         PaymentResultPresenter presenter = new PaymentResultPresenter(navigator);
@@ -282,40 +312,10 @@ public class PaymentResultTest {
         Assert.assertTrue(navigator.errorShown);
     }
 
-    @Test
-    public void whenPaymentOffRejectedThenShowRejection() {
-
-        MockedNavigator navigator = new MockedNavigator();
-        PaymentResultPresenter presenter = new PaymentResultPresenter(navigator);
-
-        PaymentData paymentData = new PaymentData();
-        paymentData.setPaymentMethod(PaymentMethods.getPaymentMethodOff());
-
-        PaymentResult paymentResult = new PaymentResult.Builder()
-                .setPaymentStatus(Payment.StatusCodes.STATUS_REJECTED)
-                .setPaymentData(paymentData)
-                .build();
-
-        presenter.setPaymentResult(paymentResult);
-        presenter.setAmount(new BigDecimal("100"));
-        presenter.setSite(Sites.ARGENTINA);
-        presenter.setDiscountEnabled(Boolean.TRUE);
-
-        MockedPropsView mockedView = new MockedPropsView();
-        MockedProvider mockedProvider = new MockedProvider();
-
-        presenter.attachView(mockedView);
-        presenter.attachResourcesProvider(mockedProvider);
-
-        presenter.initialize();
-        //TODO fix
-//        Assert.assertTrue(mockedView.rejectionShown);
-    }
-
     private class MockedPropsView implements PaymentResultPropsView {
 
         @Override
-        public void setPropPaymentResult(PaymentResult paymentResult, PaymentResultScreenPreference paymentResultScreenPreference) {
+        public void setPropPaymentResult(PaymentResult paymentResult, PaymentResultScreenPreference paymentResultScreenPreference, AmountFormat amountFormat) {
 
         }
 
@@ -391,6 +391,11 @@ public class PaymentResultTest {
 
         @Override
         public String getRejectedBadFilledOther() {
+            return null;
+        }
+
+        @Override
+        public String getRejectedCallForAuthorizeTitle() {
             return null;
         }
 
